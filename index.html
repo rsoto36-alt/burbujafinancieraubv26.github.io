@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brújula Financiera UBV</title>
+<meta name="description" content="Laboratorio financiero digital de la Universidad Bolivariana de Venezuela: aprende, calcula y simula situaciones financieras reales. Calculadoras de punto de equilibrio, precios, ROI, P2P, interés compuesto, presupuesto y amortización.">
+<meta name="author" content="Reinaldo Soto — Universidad Bolivariana de Venezuela">
+<meta name="theme-color" content="#0B1F3A">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Brújula UBV">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_VE">
+<meta property="og:title" content="Brújula Financiera UBV — Encuentra tu dirección financiera">
+<meta property="og:description" content="Aprende, calcula y simula: 9 herramientas financieras gratuitas para la comunidad ubevista y emprendedores.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230B1F3A'/%3E%3Ccircle cx='20' cy='20' r='14' fill='none' stroke='%2314B8B0' stroke-width='2.2'/%3E%3Cpath d='M20 8 L24 20 L20 32 L16 20 Z' fill='%23F57C00'/%3E%3Ccircle cx='20' cy='20' r='2.4' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* Tema antes de pintar: evita el destello claro/oscuro */
+(function(){
+  var t=null;
+  try{ t=localStorage.getItem('bf-tema'); }catch(e){}
+  if(!t){ t=(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'; }
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+:root{
+  --azul-profundo:#0B1F3A;
+  --azul-medio:#1565C0;
+  --turquesa:#14B8B0;
+  --verde:#1E8E5A;
+  --naranja:#F57C00;
+  --rojo:#D64545;
+  --gris-claro:#F4F6F8;
+  --gris-linea:#E2E7ED;
+  --texto:#16213A;
+  --texto-suave:#55657E;
+  --card-bg:#FFFFFF;
+  --bg:#F4F6F8;
+  --acento-txt:#1565C0;
+  --valor:#0B1F3A;
+  --suave-naranja:#FFF4E8;
+  --suave-verde:#E7F5EC;
+  --shadow:0 1px 2px rgba(11,31,58,.06), 0 6px 20px rgba(11,31,58,.06);
+  --radius:16px;
+  --nav-h:62px;
+  --c1:#1E8E5A; --c2:#F57C00; --c3:#1565C0; --c4:#14B8B0;
+}
+:root[data-theme="dark"]{
+  --bg:#0E1626; --card-bg:#152036; --gris-claro:#101a2e; --gris-linea:#26365A;
+  --texto:#E9EDF5; --texto-suave:#A3B3CC; --acento-txt:#5EC9C3; --valor:#FFFFFF;
+  --suave-naranja:#3a2a12; --suave-verde:#12351f;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  --c1:#3CC27F; --c2:#FF9A3C; --c3:#5B9BF0; --c4:#2BD2C9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-h) + 14px); -webkit-text-size-adjust:100%;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation:none!important; transition:none!important;} }
+body{margin:0; background:var(--bg); color:var(--texto); line-height:1.55; -webkit-font-smoothing:antialiased; font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Space Grotesk','Inter',system-ui,sans-serif; margin:0 0 .4em; color:var(--texto); font-weight:700; letter-spacing:-.01em; line-height:1.2;}
+p{margin:0 0 1em; color:var(--texto-suave);}
+a{color:inherit;}
+img,svg{max-width:100%;}
+:focus-visible{outline:3px solid var(--turquesa); outline-offset:2px; border-radius:6px;}
+.skip{position:absolute; left:-999px; top:8px; z-index:100; background:#fff; color:#000; padding:8px 14px; border-radius:8px;}
+.skip:focus{left:8px;}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+.container{max-width:1120px; margin:0 auto; padding:0 20px;}
+.section{padding:64px 0;}
+@media(max-width:600px){.section{padding:44px 0;} .container{padding:0 16px;}}
+.section-head{max-width:680px; margin-bottom:28px;}
+.eyebrow{color:var(--naranja); font-weight:700; font-size:.85rem; margin-bottom:6px; display:block;}
+.section-title{font-size:clamp(1.4rem,3.4vw,1.75rem);}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:46px; padding:12px 22px; border-radius:12px; font-weight:600; font-size:.95rem; border:none; cursor:pointer; text-decoration:none; transition:transform .15s ease, box-shadow .15s ease; font-family:inherit;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--naranja); color:#fff; box-shadow:0 6px 16px rgba(245,124,0,.28);}
+.btn-primary:hover{box-shadow:0 8px 20px rgba(245,124,0,.38);}
+.btn-outline{background:transparent; border:1.5px solid rgba(255,255,255,.55); color:#fff;}
+.btn-ghost{background:var(--gris-claro); color:var(--texto); border:1.5px solid var(--gris-linea);}
+.btn-sm{min-height:38px; padding:8px 14px; font-size:.85rem;}
+.card{background:var(--card-bg); border:1px solid var(--gris-linea); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px;}
+@media(max-width:600px){.card{padding:18px;}}
+.grid{display:grid; gap:18px;}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+.grid-5{grid-template-columns:repeat(5,minmax(0,1fr));}
+@media(max-width:920px){.grid-3,.grid-4,.grid-5{grid-template-columns:repeat(2,minmax(0,1fr));} .grid-2{grid-template-columns:1fr;}}
+@media(max-width:560px){.grid-3,.grid-5{grid-template-columns:1fr;} .grid-4.keep2{grid-template-columns:repeat(2,minmax(0,1fr));} .grid-4:not(.keep2){grid-template-columns:1fr;}}
+.pill{display:inline-block; padding:3px 11px; border-radius:999px; font-size:.72rem; font-weight:700; vertical-align:middle;}
+.badge-demo{background:var(--suave-naranja); color:#B3560B;}
+:root[data-theme="dark"] .badge-demo{color:#F5A25C;}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
+.field label{font-size:.85rem; font-weight:600; color:var(--texto);}
+.field input,.field select{min-height:46px; padding:10px 12px; border:1.5px solid var(--gris-linea); border-radius:10px; font-size:16px; background:var(--card-bg); color:var(--texto); font-family:inherit; width:100%;}
+.field input:focus,.field select:focus{outline:none; border-color:var(--turquesa); box-shadow:0 0 0 3px rgba(20,184,176,.18);}
+.hint{font-size:.8rem; color:var(--texto-suave); margin-top:2px;}
+.result-box{background:var(--gris-claro); border:1px solid var(--gris-linea); border-radius:12px; padding:14px 16px; margin-top:10px;}
+.result-row{display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:8px 0; border-bottom:1px dashed var(--gris-linea); font-size:.92rem;}
+.result-row:last-child{border-bottom:none;}
+.result-row .v{font-weight:700; color:var(--valor); text-align:right; font-variant-numeric:tabular-nums;}
+.result-highlight{font-size:1.45rem; font-weight:700; color:var(--c1); font-family:'Space Grotesk',sans-serif; font-variant-numeric:tabular-nums;}
+.kpi .hint{margin:0 0 2px;}
+.alert{font-size:.85rem; padding:10px 12px; border-radius:10px; margin-top:10px; display:none;}
+.alert.show{display:block;}
+.alert.warn{background:var(--suave-naranja); color:var(--texto); border-left:3px solid var(--naranja);}
+.alert.ok{background:var(--suave-verde); color:var(--texto); border-left:3px solid var(--verde);}
+.tag-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.tab-btn{min-height:42px; padding:9px 16px; border-radius:10px; border:1.5px solid var(--gris-linea); background:var(--card-bg); color:var(--texto-suave); font-weight:600; font-size:.88rem; cursor:pointer; font-family:inherit;}
+.tab-btn[aria-selected="true"]{background:var(--azul-profundo); border-color:var(--azul-profundo); color:#fff;}
+:root[data-theme="dark"] .tab-btn[aria-selected="true"]{background:var(--turquesa); border-color:var(--turquesa); color:#06222a;}
+.progressbar{height:10px; background:var(--gris-linea); border-radius:999px; overflow:hidden;}
+.progressbar>div{height:100%; width:0; background:linear-gradient(90deg,var(--turquesa),var(--verde)); border-radius:999px; transition:width .5s ease;}
+.disclaimer{font-size:.8rem; color:var(--texto-suave); background:var(--gris-claro); border-left:3px solid var(--naranja); padding:10px 14px; border-radius:8px; margin:12px 0 0;}
+ul.clean{color:var(--texto-suave); font-size:.93rem; padding-left:18px; margin:0;}
+ul.clean li{margin-bottom:6px;}
+
+/* ---------- NAV ---------- */
+header.topnav{position:sticky; top:0; z-index:50; background:rgba(11,31,58,.95); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding-top:env(safe-area-inset-top,0px);}
+.nav-inner{max-width:1180px; margin:0 auto; height:var(--nav-h); padding:0 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+.brand{display:flex; align-items:center; gap:10px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.05rem; text-decoration:none; white-space:nowrap;}
+.brand svg{width:30px; height:30px; flex:none;}
+.navlinks{display:flex; gap:2px; list-style:none; margin:0; padding:0;}
+.navlinks a{color:rgba(255,255,255,.8); text-decoration:none; font-size:.84rem; font-weight:600; padding:8px 10px; border-radius:8px; transition:background .15s, color .15s; white-space:nowrap;}
+.navlinks a:hover,.navlinks a.active{background:rgba(255,255,255,.12); color:#fff;}
+.nav-actions{display:flex; gap:8px; align-items:center;}
+.icon-btn{background:rgba(255,255,255,.12); border:none; color:#fff; width:40px; height:40px; border-radius:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none;}
+.icon-btn:hover{background:rgba(255,255,255,.2);}
+.icon-btn svg{width:19px; height:19px;}
+#menuBtn{display:none;}
+@media(max-width:1060px){.navlinks{display:none;} #menuBtn{display:flex;}}
+@media(max-width:380px){.brand span{font-size:.92rem;}}
+.ico-moon{display:none;} :root[data-theme="dark"] .ico-moon{display:block;} :root[data-theme="dark"] .ico-sun{display:none;}
+
+/* drawer */
+.drawer-wrap{position:fixed; inset:0; overflow:hidden; z-index:80; pointer-events:none; visibility:hidden; transition:visibility 0s .25s;}
+body.menu-open .drawer-wrap{pointer-events:auto; visibility:visible; transition:none;}
+.drawer-bg{position:absolute; inset:0; background:rgba(5,12,25,.55); z-index:70; opacity:0; pointer-events:none; transition:opacity .2s;}
+.drawer{position:absolute; top:0; right:0; bottom:0; width:min(320px,86vw); background:var(--card-bg); z-index:80; transform:translateX(100%); transition:transform .25s ease; padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px)); overflow-y:auto; display:flex; flex-direction:column; gap:4px;}
+body.menu-open .drawer{transform:none;}
+body.menu-open .drawer-bg{opacity:1; pointer-events:auto;}
+.drawer-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.drawer a{display:flex; align-items:center; gap:12px; padding:13px 12px; border-radius:10px; text-decoration:none; color:var(--texto); font-weight:600; font-size:.98rem;}
+.drawer a:hover,.drawer a.active{background:var(--gris-claro); color:var(--naranja);}
+.drawer .close{background:var(--gris-claro); color:var(--texto);}
+
+/* ---------- HERO ---------- */
+.hero{background:radial-gradient(circle at 15% 20%, rgba(20,184,176,.25), transparent 45%), radial-gradient(circle at 85% 0%, rgba(245,124,0,.18), transparent 40%), linear-gradient(180deg,#0B1F3A,#0e2a52 65%, #0B1F3A); color:#fff; padding:64px 0 56px; position:relative; overflow:hidden;}
+.hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center;}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr; gap:22px;} .hero{padding:36px 0 36px;} .compass-wrap{order:-1;}}
+.hero h1{color:#fff; font-size:clamp(2rem,4.6vw,3.3rem); line-height:1.05; margin-bottom:14px;}
+.hero .tagline{color:var(--turquesa); font-weight:600; font-size:1.08rem; margin-bottom:12px; display:block;}
+.hero p.lead{color:rgba(255,255,255,.8); font-size:1.04rem; max-width:52ch;}
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;}
+@media(max-width:480px){.hero-cta .btn{flex:1 1 100%;}}
+.compass-wrap{display:flex; align-items:center; justify-content:center;}
+#compassSvg{width:min(340px,70vw);}
+@media(max-width:920px){#compassSvg{width:min(190px,48vw);}}
+#needle{transform-origin:150px 150px; animation:sway 7s ease-in-out infinite;}
+@keyframes sway{0%,100%{transform:rotate(-14deg);} 50%{transform:rotate(16deg);}}
+#ring{transform-origin:150px 150px; animation:spin 90s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.route-track{margin-top:30px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:14px; padding:16px 18px;}
+.route-track p{color:rgba(255,255,255,.78); margin:0 0 8px; font-size:.9rem;}
+.route-steps{display:flex; justify-content:space-between; gap:4px; margin-top:8px; font-size:.74rem; color:rgba(255,255,255,.6); flex-wrap:wrap;}
+.route-steps span.on{color:var(--turquesa); font-weight:700;}
+
+/* onboarding */
+.onboard-card{cursor:pointer; text-align:left; font:inherit; color:inherit; width:100%; transition:transform .15s ease, border-color .15s ease;}
+.onboard-card:hover{border-color:var(--turquesa); transform:translateY(-2px);}
+.onboard-card .emoji{font-size:1.6rem;}
+@media(max-width:560px){.onboard-card{display:flex; gap:14px; align-items:flex-start;} .onboard-card h4{margin-top:0!important;}}
+
+/* dashboard */
+.stat-num{font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--valor); font-variant-numeric:tabular-nums;}
+.stat-num small{font-size:1rem; color:var(--texto-suave); font-weight:600;}
+.dash-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+
+/* steps */
+.step-track{display:flex; gap:10px; margin-bottom:18px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x mandatory;}
+.step-chip{flex:1 0 140px; scroll-snap-align:start; padding:12px 14px; border-radius:12px; background:var(--card-bg); border:1.5px solid var(--gris-linea); font-size:.8rem; font-weight:700; cursor:pointer; text-align:left; color:var(--texto); font-family:inherit; letter-spacing:.02em;}
+.step-chip[aria-selected="true"]{border-color:var(--naranja); background:var(--suave-naranja);}
+.step-chip small{display:block; color:var(--texto-suave); font-weight:500; margin-top:3px; font-size:.82rem; letter-spacing:0;}
+.step-nav{display:flex; justify-content:space-between; gap:10px; margin-top:14px;}
+
+/* checklist */
+.check-row{display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--gris-linea); cursor:pointer; color:var(--texto); font-size:.93rem;}
+.check-row:last-child{border-bottom:none;}
+.check-row input{margin-top:2px; width:20px; height:20px; accent-color:var(--verde); flex:none;}
+.risk-dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px;}
+.risk-media{background:var(--naranja);}
+
+/* tools index */
+.tool-index{display:flex; gap:8px; overflow-x:auto; padding:4px 2px 10px; margin-bottom:12px; scroll-snap-type:x proximity;}
+.tool-index a{flex:none; scroll-snap-align:start; text-decoration:none; font-size:.84rem; font-weight:600; padding:9px 14px; border-radius:999px; background:var(--card-bg); border:1.5px solid var(--gris-linea); color:var(--texto); display:flex; align-items:center; gap:6px;}
+.tool-index a.done{border-color:var(--verde);}
+.tool-index a.done::after{content:"✓"; color:var(--c1); font-weight:800;}
+.tool-card{margin-bottom:22px; scroll-margin-top:calc(var(--nav-h) + 14px);}
+.tool-card h3{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.tool-num{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:var(--azul-profundo); color:#fff; font-size:.85rem; flex:none;}
+:root[data-theme="dark"] .tool-num{background:var(--turquesa); color:#06222a;}
+.used-tag{font-size:.7rem; color:var(--c1); font-weight:700; background:var(--suave-verde); padding:3px 9px; border-radius:999px; display:none;}
+.tool-card.done .used-tag{display:inline-block;}
+.preset-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.preset-btn{min-height:40px; padding:7px 14px; border-radius:999px; border:1.5px solid var(--gris-linea); background:var(--card-bg); font-size:.84rem; font-weight:600; cursor:pointer; color:var(--texto); font-family:inherit;}
+.preset-btn:hover,.preset-btn.on{border-color:var(--turquesa);}
+
+/* charts (SVG propio, sin librerías) */
+.chart{position:relative; width:100%; min-height:240px; margin-top:6px;}
+.chart svg{display:block; width:100%; height:240px; overflow:visible; touch-action:pan-y;}
+.chart .axis text{fill:var(--texto-suave); font-size:11px; font-family:inherit;}
+.chart .grid-l{stroke:var(--gris-linea); stroke-width:1;}
+.chart .legend{display:flex; gap:14px; flex-wrap:wrap; font-size:.8rem; color:var(--texto-suave); margin-bottom:6px;}
+.chart .legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px;}
+.chart .tip{position:absolute; pointer-events:none; background:var(--azul-profundo); color:#fff; font-size:.78rem; padding:7px 10px; border-radius:8px; white-space:nowrap; opacity:0; transition:opacity .12s; z-index:2; box-shadow:0 6px 18px rgba(0,0,0,.25);}
+.chart .tip.show{opacity:1;}
+.chart .tip b{display:block; margin-bottom:2px;}
+.donut-wrap{display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap; min-height:240px;}
+.donut-wrap svg{width:190px; height:190px;}
+.donut-legend{display:flex; flex-direction:column; gap:10px; font-size:.86rem; color:var(--texto);}
+.donut-legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:8px; vertical-align:-1px;}
+.donut-legend span{color:var(--texto-suave); display:block; padding-left:20px; font-size:.8rem;}
+
+/* tablas */
+.scroll-x{overflow-x:auto;}
+table.simple{width:100%; border-collapse:collapse; font-size:.88rem;}
+table.simple th,table.simple td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--gris-linea);}
+table.simple th{color:var(--texto-suave); font-weight:600; font-size:.78rem;}
+@media(max-width:640px){
+  table.simple thead{display:none;}
+  table.simple tr{display:block; border:1px solid var(--gris-linea); border-radius:12px; padding:6px 12px; margin-bottom:10px;}
+  table.simple td{display:flex; justify-content:space-between; gap:12px; border-bottom:1px dashed var(--gris-linea); padding:8px 0;}
+  table.simple td:last-child{border-bottom:none;}
+  table.simple td::before{content:attr(data-label); color:var(--texto-suave); font-weight:600; font-size:.8rem;}
+}
+
+/* glosario */
+.glossary-search{min-height:50px; padding:13px 16px 13px 44px; border-radius:12px; border:1.5px solid var(--gris-linea); width:100%; font-size:16px; background:var(--card-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238595AE' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px center/20px; color:var(--texto); font-family:inherit;}
+.glossary-search:focus{outline:none; border-color:var(--turquesa);}
+.gloss-term h4{font-family:'Inter',sans-serif; color:var(--acento-txt); font-size:1.02rem;}
+.gloss-label{font-size:.74rem; color:var(--texto-suave); font-weight:700;}
+.gloss-term p{color:var(--texto); font-size:.9rem;}
+.gloss-count{font-size:.82rem; color:var(--texto-suave); margin-top:10px;}
+mark{background:rgba(245,124,0,.25); color:inherit; border-radius:3px;}
+
+/* transmedia */
+#transmedia{background:#0B1F3A; color:#fff;}
+.tm-card{text-align:center; background:rgba(255,255,255,.05)!important; border-color:rgba(255,255,255,.15)!important;}
+.tm-card .tm-icon{width:44px; height:44px; margin:0 auto 10px;}
+.tm-card h4{color:#fff; font-size:1rem;}
+.tm-card p{color:rgba(255,255,255,.7); font-size:.86rem;}
+.tm-link{display:inline-block; margin-top:4px; font-size:.86rem; font-weight:700; color:#14B8B0; text-decoration:none; padding:6px 0;}
+.tm-soon{display:inline-block; margin-top:4px; font-size:.8rem; color:rgba(255,255,255,.5); font-style:italic;}
+.route-diagram{display:flex; align-items:center; flex-wrap:wrap; gap:10px; justify-content:center; padding:20px 0;}
+.route-node{background:rgba(255,255,255,.1); color:#fff; border-radius:10px; padding:10px 14px; font-size:.84rem; font-weight:600; text-align:center;}
+.route-arrow{color:rgba(255,255,255,.55); font-size:1.1rem;}
+@media(max-width:600px){.route-diagram{flex-direction:column;} .route-arrow{transform:rotate(90deg);}}
+
+/* gamificación */
+.level-card{position:relative; transition:border-color .2s, opacity .2s;}
+.level-card.locked{opacity:.62;}
+.level-card.current{border-color:var(--naranja); box-shadow:0 0 0 3px rgba(245,124,0,.18), var(--shadow);}
+.level-num{font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--turquesa); font-size:.8rem;}
+.level-state{position:absolute; top:16px; right:16px; font-size:1.1rem;}
+
+/* observatorio */
+.observ-tag{font-size:.7rem; color:var(--c1); font-weight:700; background:var(--suave-verde); padding:3px 9px; border-radius:999px;}
+.observ-source{font-size:.76rem; color:var(--texto-suave); margin:6px 0 0;}
+.observ-val{margin:10px 0 2px; font-size:1.3rem; font-family:'Space Grotesk',sans-serif; color:var(--valor);}
+.src-links{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;}
+
+/* footer */
+footer{background:#0B1F3A; color:rgba(255,255,255,.75); padding:44px 0 32px; padding-bottom:calc(32px + env(safe-area-inset-bottom,0px));}
+footer a{color:#fff; text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+footer .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:28px;}
+@media(max-width:700px){footer .foot-grid{grid-template-columns:1fr 1fr;} footer .foot-grid>div:first-child{grid-column:1/-1;}}
+footer h4{color:#fff; font-size:.9rem;}
+.foot-links{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; font-size:.88rem;}
+.foot-disclaimer{border-top:1px solid rgba(255,255,255,.14); margin-top:28px; padding-top:18px; font-size:.78rem; color:rgba(255,255,255,.6); max-width:820px;}
+.foot-social{display:flex; gap:12px; margin-top:12px;}
+.foot-social a{width:42px; height:42px; border-radius:10px; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center;}
+.foot-social a:hover{background:rgba(255,255,255,.2);}
+.foot-social svg{width:18px; height:18px;}
+
+/* compartir */
+.share-box{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+.btn-wa{background:#1E8E5A; color:#fff;}
+.copy-fallback{display:none; margin-top:10px; width:100%;}
+.copy-fallback.show{display:block;}
+.copy-fallback input{width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid var(--gris-linea); font-size:14px; background:var(--card-bg); color:var(--texto);}
+
+/* bottom nav móvil */
+.mobnav{display:none;}
+@media(max-width:1060px){
+  .mobnav{display:flex; position:fixed; bottom:0; left:0; right:0; z-index:60; background:var(--card-bg); border-top:1px solid var(--gris-linea); padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px)); justify-content:space-around; box-shadow:0 -6px 18px rgba(0,0,0,.08);}
+  .mobnav a{display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--texto-suave); text-decoration:none; font-size:.68rem; font-weight:600; flex:1; padding:6px 0; min-height:48px; border-radius:10px;}
+  .mobnav a.active{color:var(--naranja);}
+  .mobnav svg{width:22px; height:22px;}
+  body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px));}
+  .to-top{display:none!important;}
+}
+.to-top{position:fixed; right:16px; bottom:22px; z-index:55; width:44px; height:44px; border-radius:12px; border:none; background:var(--naranja); color:#fff; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.2); opacity:0; pointer-events:none; transition:opacity .2s; display:flex; align-items:center; justify-content:center;}
+.to-top.show{opacity:1; pointer-events:auto;}
+
+/* toast */
+.toast{position:fixed; left:50%; top:calc(var(--nav-h) + 12px + env(safe-area-inset-top,0px)); transform:translate(-50%,-20px); background:var(--azul-profundo); color:#fff; padding:12px 18px; border-radius:12px; font-size:.9rem; font-weight:600; z-index:90; opacity:0; pointer-events:none; transition:all .3s; box-shadow:0 10px 30px rgba(0,0,0,.3); max-width:92vw; text-align:center; border:1px solid rgba(255,255,255,.15);}
+.toast.show{opacity:1; transform:translate(-50%,0);}
+
+@media print{
+  header.topnav,.mobnav,.to-top,.drawer,.drawer-bg,.hero-cta,#transmedia,.toast,.dash-actions,.share-box{display:none!important;}
+  body{background:#fff; padding:0;} .card{box-shadow:none; break-inside:avoid;}
+  .hero{background:#0B1F3A!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#principal">Saltar al contenido</a>
+
+<!-- ============ NAV ============ -->
+<header class="topnav">
+  <div class="nav-inner">
+    <a href="#inicio" class="brand" aria-label="Brújula Financiera UBV, ir al inicio">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="18" stroke="#14B8B0" stroke-width="2.2"/><path d="M20 8 L24 20 L20 32 L16 20 Z" fill="#F57C00"/><circle cx="20" cy="20" r="2.4" fill="#fff"/></svg>
+      <span>Brújula Financiera UBV</span>
+    </a>
+    <nav aria-label="Secciones">
+      <ul class="navlinks" id="navlinks"></ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar a tema oscuro" title="Tema claro / oscuro">
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-wrap"><div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-label="Menú de secciones">
+  <div class="drawer-head">
+    <strong style="font-family:'Space Grotesk',system-ui,sans-serif; font-size:1.05rem">Secciones</strong>
+    <button class="icon-btn close" id="menuClose" aria-label="Cerrar menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div id="drawerLinks"></div>
+</aside></div>
+
+<main id="principal">
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <div class="container hero-grid">
+    <div>
+      <span class="tagline">🧭 Encuentra tu dirección financiera</span>
+      <h1>Brújula Financiera UBV</h1>
+      <p class="lead">Aprende, calcula y simula situaciones financieras reales para fortalecer tus conocimientos y tomar decisiones más informadas. Un laboratorio financiero digital para la comunidad ubevista.</p>
+      <div class="hero-cta">
+        <a href="#bienvenida" class="btn btn-primary">Comenzar mi recorrido</a>
+        <a href="#herramientas" class="btn btn-outline">Explorar herramientas</a>
+      </div>
+      <div class="route-track">
+        <p>Tu recorrido financiero · <strong id="heroPct" style="color:#fff">0%</strong></p>
+        <div class="progressbar" role="progressbar" aria-label="Progreso del recorrido" aria-valuemin="0" aria-valuemax="100" id="heroBarWrap"><div id="heroProgress"></div></div>
+        <div class="route-steps" id="routeSteps"><span>Aprender</span><span>Comprender</span><span>Simular</span><span>Aplicar</span><span>Mejorar</span></div>
+      </div>
+    </div>
+    <div class="compass-wrap" aria-hidden="true">
+      <svg id="compassSvg" viewBox="0 0 300 300" fill="none">
+        <g id="ring">
+          <circle cx="150" cy="150" r="130" stroke="#14B8B0" stroke-width="2" opacity=".6" stroke-dasharray="2 8"/>
+        </g>
+        <circle cx="150" cy="150" r="112" stroke="#1565C0" stroke-width="1.4" opacity=".5"/>
+        <g opacity=".9" font-family="Space Grotesk, sans-serif" font-size="15" fill="#fff" text-anchor="middle">
+          <text x="150" y="58">N</text><text x="150" y="254">S</text><text x="248" y="155">E</text><text x="52" y="155">O</text>
+        </g>
+        <g id="needle">
+          <path d="M150 70 L170 150 L150 230 L130 150 Z" fill="#F57C00"/>
+          <path d="M150 150 L170 150 L150 230 L130 150 Z" fill="#fff" opacity=".9"/>
+        </g>
+        <circle cx="150" cy="150" r="10" fill="#0B1F3A" stroke="#14B8B0" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BIENVENIDA ============ -->
+<section class="section" id="bienvenida">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Empieza aquí</span>
+      <h2 class="section-title">🧭 ¿Hacia dónde quieres dirigir tus finanzas?</h2>
+      <p>Elige una ruta y te llevamos directo al contenido y las herramientas relacionadas.</p>
+    </div>
+    <div class="grid grid-5" id="onboardGrid"></div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="section" id="dashboard" style="background:var(--gris-claro); padding-top:48px; padding-bottom:48px;">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Tu progreso</span>
+      <h2 class="section-title">Tu brújula financiera</h2>
+      <p>Se actualiza mientras recorres la plataforma. Tu avance se guarda solo en este navegador.</p>
+    </div>
+    <div class="grid grid-4 keep2">
+      <div class="card"><div class="stat-num" id="statHerr">0<small>/9</small></div><p style="margin:0;">Herramientas utilizadas</p></div>
+      <div class="card"><div class="stat-num" id="statCont">0<small>/10</small></div><p style="margin:0;">Secciones exploradas</p></div>
+      <div class="card"><div class="stat-num" id="statRetos">0<small>/4</small></div><p style="margin:0;">Retos completados</p></div>
+      <div class="card"><div class="stat-num" id="statNivel">1</div><p style="margin:0;" id="statNivelTxt">Nivel: Explorador Financiero</p></div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:8px; font-size:.9rem; font-weight:600;">
+        <span id="progressText">Recorrido completado</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progressbar"><div id="dashProgress"></div></div>
+      <p class="hint" id="nextHint" style="margin-top:10px;"></p>
+      <div class="dash-actions">
+        <a class="btn btn-ghost btn-sm" href="#gamificacion">Ver niveles</a>
+        <button class="btn btn-ghost btn-sm" id="resetBtn" type="button">Reiniciar mi progreso</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MERCADO BURSÁTIL ============ -->
+<section class="section" id="bursatil" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">📈 Aprende antes de invertir</span>
+      <h2 class="section-title">Mercado bursátil popular</h2>
+      <p>Una ruta paso a paso para comprender cómo funciona el mercado antes de tomar cualquier decisión.</p>
+    </div>
+
+    <div class="step-track" id="stepTrack" role="tablist" aria-label="Pasos para conocer el mercado"></div>
+    <div class="card" id="stepDetail" role="tabpanel" aria-live="polite"></div>
+
+    <div class="card" style="margin-top:28px;">
+      <h3>¿Cómo invertir en la Bolsa de Valores de Caracas desde montos mínimos?</h3>
+      <p>La Bolsa de Valores de Caracas (BVC) es el mercado donde se negocian públicamente acciones y otros instrumentos financieros en Venezuela. Antes de participar, conviene comprender algunos elementos básicos:</p>
+      <div class="grid grid-2">
+        <ul class="clean">
+          <li><strong>Conceptos básicos:</strong> una acción representa una fracción de propiedad de una empresa.</li>
+          <li><strong>Participantes:</strong> emisores, inversionistas, casas de bolsa y el ente regulador.</li>
+          <li><strong>Intermediarios:</strong> las operaciones se realizan a través de una casa de bolsa autorizada.</li>
+        </ul>
+        <ul class="clean">
+          <li><strong>Instrumentos:</strong> acciones y otros títulos negociados en el mercado.</li>
+          <li><strong>Riesgos:</strong> el valor de una inversión puede subir o bajar; no hay rendimiento garantizado.</li>
+          <li><strong>Costos:</strong> comisiones de intermediación y custodia, que varían según la casa de bolsa.</li>
+        </ul>
+      </div>
+      <p class="disclaimer">Esta información es educativa y general. No representa una recomendación de inversión específica. Antes de operar, verifica los requisitos vigentes directamente con la Bolsa de Valores de Caracas y una casa de bolsa autorizada.</p>
+    </div>
+
+    <h3 style="margin-top:34px;">Renta fija vs. renta variable</h3>
+    <p>Selecciona una alternativa para comparar sus características.</p>
+    <div class="tag-row" id="rentaTabs" role="tablist"></div>
+    <div class="card" id="rentaDetail" role="tabpanel"></div>
+
+    <h3 style="margin-top:34px;">Instrumentos productivos</h3>
+    <div class="grid grid-2" id="instrumentosGrid"></div>
+  </div>
+</section>
+
+<!-- ============ CRIPTO & P2P ============ -->
+<section class="section" id="cripto" data-exp style="background:var(--gris-claro);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">₿ Economía digital P2P</span>
+      <h2 class="section-title">Criptoactivos y economía digital P2P</h2>
+      <p>El mundo digital abre nuevas posibilidades, pero también nuevos riesgos. Aprende a identificar ambos.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3><span class="risk-dot risk-media" aria-hidden="true"></span>USDT / USDC — Stablecoins</h3>
+        <p><strong>¿Qué son?</strong> Criptoactivos diseñados para mantener un valor referenciado, generalmente al dólar estadounidense.</p>
+        <p><strong>¿Cómo funcionan?</strong> Su emisor sostiene reservas u otros mecanismos para intentar mantener esa referencia de valor.</p>
+        <p><strong>Diferencias:</strong> USDT (Tether) y USDC (Circle) son emitidas por entidades distintas, con políticas de reservas y auditoría propias.</p>
+        <p><strong>Riesgos:</strong> riesgo del emisor, riesgo regulatorio, riesgo de la plataforma donde se custodian y riesgo de la contraparte en una operación P2P.</p>
+        <p><strong>Custodia y seguridad:</strong> quien controla las claves de una billetera controla los fondos; la seguridad depende del usuario y de la plataforma elegida.</p>
+        <p class="disclaimer">No se garantiza que estas stablecoins protejan el poder adquisitivo de forma permanente. Su comportamiento y riesgos deben comprenderse antes de utilizarlas.</p>
+      </div>
+      <div class="card">
+        <h3>🛡️ Checklist de seguridad P2P</h3>
+        <div id="checklistWrap"></div>
+        <div style="margin-top:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:.85rem; font-weight:600; margin-bottom:6px;">
+            <span>Seguridad completada</span><span id="checkPct">0%</span>
+          </div>
+          <div class="progressbar"><div id="checkBar"></div></div>
+          <div class="alert ok" id="checkMsg" role="status">Excelente. Has completado el recorrido básico de seguridad P2P. 🏅</div>
+        </div>
+        <p class="hint" style="margin-top:12px;">Plataformas de referencia mencionadas con fines educativos: Binance, Bybit, El Dorado. No es una recomendación.</p>
+        <p class="disclaimer">Nunca compartas contraseñas, claves privadas, frases semilla ni códigos 2FA. Ninguna plataforma legítima los pide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRÉDITO / EMPRENDEDORAS ============ -->
+<section class="section" id="emprendedor" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">💳 Fintech y financiamiento</span>
+      <h2 class="section-title">Crédito digital y finanzas emprendedoras</h2>
+      <p>Conceptos clave para entender el crédito, su costo y su papel en un emprendimiento.</p>
+    </div>
+    <div class="grid grid-4" id="creditoGrid"></div>
+
+    <h3 style="margin-top:34px;">🌱 Financiamiento colaborativo — simulador</h3>
+    <p>Estima cómo se cubriría el capital de un proyecto mediante aportes de varios participantes.</p>
+    <div class="card" id="cfCard">
+      <div class="grid grid-3">
+        <div class="field"><label for="cfCapital">Capital requerido</label><input type="number" inputmode="decimal" step="any" id="cfCapital" value="5000" min="0"></div>
+        <div class="field"><label for="cfPart">Número de participantes</label><input type="number" inputmode="numeric" id="cfPart" value="40" min="1"></div>
+        <div class="field"><label for="cfAporte">Aporte individual</label><input type="number" inputmode="decimal" step="any" id="cfAporte" value="100" min="0"></div>
+      </div>
+      <div class="result-box grid grid-3" aria-live="polite">
+        <div class="kpi"><div class="hint">Capital reunido</div><div class="result-highlight" id="cfReunido">0</div></div>
+        <div class="kpi"><div class="hint">Capital faltante</div><div class="result-highlight" style="color:var(--c2);" id="cfFaltante">0</div></div>
+        <div class="kpi"><div class="hint">Meta cubierta</div><div class="result-highlight" style="color:var(--c3);" id="cfPct">0%</div></div>
+      </div>
+      <div class="progressbar" style="margin-top:12px;"><div id="cfBar"></div></div>
+      <p class="hint" id="cfNecesarios" style="margin-top:8px;"></p>
+      <p class="disclaimer">Simulación educativa. No representa una campaña de financiamiento real ni una oferta de inversión.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINANZAS PERSONALES ============ -->
+<section class="section" id="personal" data-exp style="background:var(--gris-claro);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">💰 Economía volátil</span>
+      <h2 class="section-title">Finanzas personales en una economía volátil</h2>
+      <p>Presupuesto, inflación, ahorro y planificación: la base de una economía personal más estable.</p>
+    </div>
+    <div class="grid grid-2">
+      <form class="card" id="pForm" novalidate>
+        <h3>¿Cómo está tu presupuesto?</h3>
+        <div class="field"><label for="pIngreso">Ingreso mensual</label><input type="number" inputmode="decimal" step="any" id="pIngreso" placeholder="Ej: 300"></div>
+        <div class="field"><label for="pFijos">Gastos fijos (alquiler, servicios)</label><input type="number" inputmode="decimal" step="any" id="pFijos" placeholder="Ej: 120"></div>
+        <div class="field"><label for="pVariables">Gastos variables (comida, transporte)</label><input type="number" inputmode="decimal" step="any" id="pVariables" placeholder="Ej: 100"></div>
+        <div class="field"><label for="pAhorro">¿Cuánto ahorras al mes?</label><input type="number" inputmode="decimal" step="any" id="pAhorro" placeholder="Ej: 20"></div>
+        <button class="btn btn-primary" type="submit" style="width:100%;">Ver mi resumen</button>
+        <div class="result-box" id="pResult" style="display:none;" aria-live="polite"></div>
+        <p class="disclaimer">Este resumen es educativo y no constituye un diagnóstico financiero profesional.</p>
+      </form>
+      <div class="card">
+        <h3>Temas clave</h3>
+        <ul class="clean" style="margin-bottom:16px;">
+          <li><strong>Inflación:</strong> pérdida del poder de compra del dinero a lo largo del tiempo.</li>
+          <li><strong>Diversificación de ingresos:</strong> contar con más de una fuente de ingreso reduce el riesgo.</li>
+          <li><strong>Ahorro:</strong> apartar una porción del ingreso antes de gastar, no después.</li>
+          <li><strong>Deudas:</strong> comprender el costo real (tasa, plazo, comisiones) antes de asumir un compromiso.</li>
+          <li><strong>Planificación:</strong> anticipar gastos variables y metas de mediano plazo.</li>
+        </ul>
+        <a href="#tool-503020" class="btn btn-ghost">Ir al distribuidor 50/30/20 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HERRAMIENTAS ============ -->
+<section class="section" id="herramientas" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">🧮 Laboratorio financiero</span>
+      <h2 class="section-title">Herramientas</h2>
+      <p>Calculadoras y simuladores funcionales. Ajusta los valores y observa los resultados al instante.</p>
+    </div>
+    <nav class="tool-index" id="toolIndex" aria-label="Índice de herramientas"></nav>
+
+    <!-- 1 -->
+    <div class="card tool-card" id="tool-equilibrio" data-tool="equilibrio">
+      <h3><span class="tool-num">1</span>Calculadora de punto de equilibrio <span class="used-tag">✓ usada</span></h3>
+      <p>Descubre cuánto necesitas vender para cubrir tus costos.</p>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="eqFijos">Costos fijos del mes</label><input type="number" inputmode="decimal" step="any" id="eqFijos" value="400"></div>
+          <div class="field"><label for="eqVarUnit">Costo variable por unidad</label><input type="number" inputmode="decimal" step="any" id="eqVarUnit" value="3"></div>
+          <div class="field"><label for="eqPrecio">Precio de venta por unidad</label><input type="number" inputmode="decimal" step="any" id="eqPrecio" value="8"></div>
+          <div class="result-box" aria-live="polite">
+            <div class="result-row"><span>Punto de equilibrio (unidades)</span><span class="v" id="eqUnidades">–</span></div>
+            <div class="result-row"><span>Punto de equilibrio (monto)</span><span class="v" id="eqMonto">–</span></div>
+            <div class="result-row"><span>Margen de contribución</span><span class="v" id="eqMargen">–</span></div>
+          </div>
+          <div class="alert warn" id="eqWarn">Con este precio no cubres el costo variable de cada unidad: nunca alcanzarías el equilibrio. Revisa el precio o los costos.</div>
+        </div>
+        <div class="chart" id="chartEquilibrio"></div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card tool-card" id="tool-precios" data-tool="precios">
+      <h3><span class="tool-num">2</span>Simulador de precios y márgenes <span class="used-tag">✓ usada</span></h3>
+      <p>Carga un ejemplo o escribe tus propios costos por unidad.</p>
+      <div class="preset-row" id="presetRow"></div>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="pmInsumos">Insumos</label><input type="number" inputmode="decimal" step="any" id="pmInsumos" value="2.5"></div>
+          <div class="field"><label for="pmManoObra">Mano de obra</label><input type="number" inputmode="decimal" step="any" id="pmManoObra" value="1.2"></div>
+          <div class="field"><label for="pmEmpaque">Empaque</label><input type="number" inputmode="decimal" step="any" id="pmEmpaque" value="0.3"></div>
+          <div class="field"><label for="pmTransporte">Transporte</label><input type="number" inputmode="decimal" step="any" id="pmTransporte" value="0.4"></div>
+        </div>
+        <div>
+          <div class="field"><label for="pmComision">Comisiones (% sobre el precio)</label><input type="number" inputmode="decimal" step="any" id="pmComision" value="5"></div>
+          <div class="field"><label for="pmOtros">Otros costos</label><input type="number" inputmode="decimal" step="any" id="pmOtros" value="0.2"></div>
+          <div class="field"><label for="pmPrecio">Precio de venta</label><input type="number" inputmode="decimal" step="any" id="pmPrecio" value="7"></div>
+        </div>
+      </div>
+      <div class="result-box grid grid-4 keep2" aria-live="polite">
+        <div class="kpi"><div class="hint">Costo total</div><div class="result-highlight" style="color:var(--valor)" id="pmCosto">–</div></div>
+        <div class="kpi"><div class="hint">Ganancia por unidad</div><div class="result-highlight" id="pmGanancia">–</div></div>
+        <div class="kpi"><div class="hint">Margen bruto / neto</div><div class="result-highlight" style="color:var(--c3); font-size:1.15rem;" id="pmMargen">–</div></div>
+        <div class="kpi"><div class="hint">Markup</div><div class="result-highlight" style="color:var(--c2)" id="pmMarkup">–</div></div>
+      </div>
+      <p class="hint" id="pmSugerido" style="margin-top:10px;"></p>
+    </div>
+
+    <!-- 3 -->
+    <div class="card tool-card" id="tool-roi" data-tool="roi">
+      <h3><span class="tool-num">3</span>Calculadora ROI — compara dos escenarios <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-2">
+        <div>
+          <h4 style="font-family:Inter; font-size:.95rem;">Escenario A</h4>
+          <div class="field"><label for="roiInvA">Inversión</label><input type="number" inputmode="decimal" step="any" id="roiInvA" value="1000"></div>
+          <div class="field"><label for="roiIngA">Ingresos</label><input type="number" inputmode="decimal" step="any" id="roiIngA" value="1300"></div>
+          <div class="field"><label for="roiCostA">Costos adicionales</label><input type="number" inputmode="decimal" step="any" id="roiCostA" value="50"></div>
+          <div class="result-box" aria-live="polite">
+            <div class="result-row"><span>Ganancia</span><span class="v" id="roiGanA">–</span></div>
+            <div class="result-row"><span>ROI</span><span class="v" id="roiPctA">–</span></div>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-family:Inter; font-size:.95rem;">Escenario B</h4>
+          <div class="field"><label for="roiInvB">Inversión</label><input type="number" inputmode="decimal" step="any" id="roiInvB" value="1000"></div>
+          <div class="field"><label for="roiIngB">Ingresos</label><input type="number" inputmode="decimal" step="any" id="roiIngB" value="1150"></div>
+          <div class="field"><label for="roiCostB">Costos adicionales</label><input type="number" inputmode="decimal" step="any" id="roiCostB" value="10"></div>
+          <div class="result-box" aria-live="polite">
+            <div class="result-row"><span>Ganancia</span><span class="v" id="roiGanB">–</span></div>
+            <div class="result-row"><span>ROI</span><span class="v" id="roiPctB">–</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="alert ok show" id="roiVeredicto" aria-live="polite"></div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card tool-card" id="tool-p2p" data-tool="p2p">
+      <h3><span class="tool-num">4</span>Calculadora de rentabilidad P2P <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="p2pMonto">Monto (USDT)</label><input type="number" inputmode="decimal" step="any" id="p2pMonto" value="100"></div>
+          <div class="field"><label for="p2pCompra">Tasa de compra (Bs. por USDT)</label><input type="number" inputmode="decimal" step="any" id="p2pCompra" value="950"></div>
+          <div class="field"><label for="p2pVenta">Tasa de venta (Bs. por USDT)</label><input type="number" inputmode="decimal" step="any" id="p2pVenta" value="958"></div>
+          <div class="field"><label for="p2pComision">Comisión (%)</label><input type="number" inputmode="decimal" step="any" id="p2pComision" value="0.5"></div>
+          <div class="field"><label for="p2pOtros">Otros costos (Bs.)</label><input type="number" inputmode="decimal" step="any" id="p2pOtros" value="0"></div>
+        </div>
+        <div>
+          <div class="result-box" aria-live="polite" style="margin-top:0;">
+            <div class="result-row"><span>Costo total</span><span class="v" id="p2pCostoTotal">–</span></div>
+            <div class="result-row"><span>Ingreso</span><span class="v" id="p2pIngreso">–</span></div>
+            <div class="result-row"><span>Ganancia</span><span class="v" id="p2pGanancia">–</span></div>
+            <div class="result-row"><span>Margen sobre ingreso</span><span class="v" id="p2pMargen">–</span></div>
+            <div class="result-row"><span>Rentabilidad neta</span><span class="v" id="p2pRentab">–</span></div>
+          </div>
+          <div class="alert warn" id="p2pWarn">Con estas tasas y comisiones la operación genera pérdida.</div>
+          <p class="disclaimer">El resultado depende de las tasas, comisiones y condiciones que introduces; no proviene de una fuente en vivo.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="card tool-card" id="tool-dividendos" data-tool="dividendos">
+      <h3><span class="tool-num">5</span>Calendario de dividendos <span class="pill badge-demo">MODO DEMOSTRACIÓN</span> <span class="used-tag">✓ vista</span></h3>
+      <p>Esta versión no se conecta a datos en vivo. La tabla es un ejemplo demostrativo con fines educativos: toca una fila para ver cómo se lee.</p>
+      <div class="scroll-x">
+        <table class="simple">
+          <thead><tr><th>Empresa</th><th>Ticker</th><th>Fecha de corte</th><th>Fecha de pago</th><th>Dividendo</th><th>Dividend yield</th><th>Fuente</th></tr></thead>
+          <tbody id="divTable"></tbody>
+        </table>
+      </div>
+      <div class="alert ok" id="divExplica" aria-live="polite"></div>
+    </div>
+
+    <!-- 6 -->
+    <div class="card tool-card" id="tool-conversor" data-tool="conversor">
+      <h3><span class="tool-num">6</span>Conversor multimoneda y cripto <span class="pill badge-demo">MODO DEMOSTRACIÓN</span> <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-3" style="align-items:end;">
+        <div class="field"><label for="convMonto">Monto</label><input type="number" inputmode="decimal" step="any" id="convMonto" value="100"></div>
+        <div class="field"><label for="convDe">De</label><select id="convDe"></select></div>
+        <div class="field"><label for="convA">A</label><select id="convA"></select></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="convSwap" type="button">⇅ Invertir monedas</button>
+      <div class="result-box" aria-live="polite"><div class="result-row"><span>Resultado</span><span class="v" id="convResultado" style="font-size:1.15rem;">–</span></div></div>
+      <p class="observ-source" id="convFuente"></p>
+    </div>
+
+    <!-- 7 -->
+    <div class="card tool-card" id="tool-interes" data-tool="interes">
+      <h3><span class="tool-num">7</span>Simulador de interés compuesto <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="icCapital">Capital inicial</label><input type="number" inputmode="decimal" step="any" id="icCapital" value="200"></div>
+          <div class="field"><label for="icAporte">Aporte mensual</label><input type="number" inputmode="decimal" step="any" id="icAporte" value="20"></div>
+          <div class="field"><label for="icTasa">Tasa anual (%)</label><input type="number" inputmode="decimal" step="any" id="icTasa" value="8"></div>
+          <div class="field"><label for="icTiempo">Tiempo (años, máx. 50)</label><input type="number" inputmode="numeric" id="icTiempo" value="10" min="1" max="50"></div>
+          <div class="result-box" aria-live="polite">
+            <div class="result-row"><span>Capital aportado</span><span class="v" id="icAportado">–</span></div>
+            <div class="result-row"><span>Intereses generados</span><span class="v" id="icIntereses">–</span></div>
+            <div class="result-row"><span>Capital final</span><span class="v" id="icFinal">–</span></div>
+          </div>
+          <p class="hint">El tiempo puede tener un efecto importante sobre el crecimiento compuesto.</p>
+        </div>
+        <div class="chart" id="chartInteres"></div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="card tool-card" id="tool-503020" data-tool="presupuesto">
+      <h3><span class="tool-num">8</span>Distribuidor de presupuesto 50 / 30 / 20 <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="bIngreso">Ingreso mensual</label><input type="number" inputmode="decimal" step="any" id="bIngreso" value="300"></div>
+          <button class="btn btn-ghost" id="bPersonalizar" type="button" aria-expanded="false" aria-controls="bCustomFields" style="width:100%; margin-bottom:14px;">Personalizar mi distribución</button>
+          <div id="bCustomFields" hidden>
+            <div class="grid grid-3" style="gap:10px;">
+              <div class="field"><label for="bPctNec">% Necesid.</label><input type="number" inputmode="decimal" id="bPctNec" value="50"></div>
+              <div class="field"><label for="bPctGas">% Gastos</label><input type="number" inputmode="decimal" id="bPctGas" value="30"></div>
+              <div class="field"><label for="bPctAho">% Ahorro</label><input type="number" inputmode="decimal" id="bPctAho" value="20"></div>
+            </div>
+            <div class="alert warn" id="bWarn"></div>
+          </div>
+          <div class="result-box" aria-live="polite">
+            <div class="result-row"><span>Necesidades</span><span class="v" id="bNec">–</span></div>
+            <div class="result-row"><span>Gastos discrecionales</span><span class="v" id="bGas">–</span></div>
+            <div class="result-row"><span>Ahorro / inversión</span><span class="v" id="bAho">–</span></div>
+          </div>
+        </div>
+        <div class="chart" id="chartPresupuesto"></div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="card tool-card" id="tool-amortizacion" data-tool="amortizacion">
+      <h3><span class="tool-num">9</span>Calculadora de amortización <span class="used-tag">✓ usada</span></h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><label for="amMonto">Monto del crédito</label><input type="number" inputmode="decimal" step="any" id="amMonto" value="1000"></div>
+          <div class="field"><label for="amTasa">Tasa anual (%)</label><input type="number" inputmode="decimal" step="any" id="amTasa" value="18"></div>
+          <div class="field"><label for="amPlazo">Plazo (meses)</label><input type="number" inputmode="numeric" id="amPlazo" value="24" min="1"></div>
+          <div class="field"><label for="amExtra">Pago extraordinario mensual (opcional)</label><input type="number" inputmode="decimal" step="any" id="amExtra" value="20"></div>
+        </div>
+        <div class="chart" id="chartAmort"></div>
+      </div>
+      <div class="grid grid-2" style="margin-top:6px;">
+        <div class="result-box" aria-live="polite">
+          <h4 style="font-family:Inter; font-size:.9rem; margin-bottom:6px;">Pago normal</h4>
+          <div class="result-row"><span>Cuota mensual</span><span class="v" id="amCuota">–</span></div>
+          <div class="result-row"><span>Tiempo para saldar</span><span class="v" id="amTiempoN">–</span></div>
+          <div class="result-row"><span>Intereses totales</span><span class="v" id="amInteresN">–</span></div>
+        </div>
+        <div class="result-box" aria-live="polite">
+          <h4 style="font-family:Inter; font-size:.9rem; margin-bottom:6px;">Con pago extraordinario</h4>
+          <div class="result-row"><span>Tiempo para saldar</span><span class="v" id="amTiempoE">–</span></div>
+          <div class="result-row"><span>Intereses totales</span><span class="v" id="amInteresE">–</span></div>
+          <div class="result-row"><span>Ahorro en intereses</span><span class="v" id="amDif" style="color:var(--c1)">–</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRANSMEDIA ============ -->
+<section class="section" id="transmedia" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow" style="color:var(--turquesa);">🌐 Un ecosistema, no solo una web</span>
+      <h2 class="section-title" style="color:#fff;">Brújula Financiera UBV — Transmedia</h2>
+      <p style="color:rgba(255,255,255,.75);">La web es el centro del ecosistema. Cada canal aporta un tipo de contenido distinto, y todos conducen de vuelta a las herramientas.</p>
+    </div>
+    <div class="grid grid-3" id="tmGrid" style="margin-bottom:36px;"></div>
+
+    <h3 style="color:#fff;">Ejemplo de ruta: "¿Cuánto necesito vender para ganar dinero?"</h3>
+    <div class="route-diagram">
+      <div class="route-node">Web</div><span class="route-arrow">→</span>
+      <div class="route-node">Instagram</div><span class="route-arrow">→</span>
+      <div class="route-node">TikTok</div><span class="route-arrow">→</span>
+      <a class="route-node" href="#tool-equilibrio" style="background:#F57C00; text-decoration:none;">Calculadora de punto de equilibrio</a><span class="route-arrow">→</span>
+      <div class="route-node">Resultado personalizado</div><span class="route-arrow">→</span>
+      <div class="route-node">Contenido educativo</div>
+    </div>
+
+    <div class="card" style="background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.15); margin-top:18px;">
+      <h3 style="color:#fff; font-size:1.05rem;">📲 Comparte la Brújula</h3>
+      <p style="color:rgba(255,255,255,.72); font-size:.9rem;">Envía la plataforma a tus compañeros, estudiantes o emprendedores.</p>
+      <div class="share-box">
+        <a class="btn btn-wa" id="shareWa" href="#" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+        <button class="btn btn-outline" id="shareCopy" type="button">Copiar enlace</button>
+      </div>
+      <div class="copy-fallback" id="copyFallback"><label class="hint" for="copyInput" style="color:rgba(255,255,255,.7)">Mantén presionado para copiar:</label><input id="copyInput" readonly></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GAMIFICACIÓN ============ -->
+<section class="section" id="gamificacion" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">🏅 Progreso</span>
+      <h2 class="section-title">Niveles</h2>
+      <p>La gamificación premia el aprendizaje, no el riesgo financiero. Los niveles se desbloquean en orden.</p>
+    </div>
+    <div class="grid grid-5" id="levelGrid"></div>
+  </div>
+</section>
+
+<!-- ============ OBSERVATORIO ============ -->
+<section class="section" id="observatorio" data-exp style="background:var(--gris-claro);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">🔎 Datos de referencia</span>
+      <h2 class="section-title">Observatorio financiero</h2>
+      <p>Datos cargados manualmente con fuente y fecha citadas (no en vivo). Consulta siempre el valor vigente en la fuente oficial.</p>
+    </div>
+    <div class="grid grid-4" id="observGrid"></div>
+    <div class="src-links">
+      <a class="btn btn-ghost btn-sm" href="https://www.bcv.org.ve" target="_blank" rel="noopener">Banco Central de Venezuela ↗</a>
+      <a class="btn btn-ghost btn-sm" href="https://www.bolsadecaracas.com" target="_blank" rel="noopener">Bolsa de Valores de Caracas ↗</a>
+      <a class="btn btn-ghost btn-sm" href="https://www.sunaval.gob.ve" target="_blank" rel="noopener">SUNAVAL ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GLOSARIO ============ -->
+<section class="section" id="glosario" data-exp>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">📚 Glosario financiero</span>
+      <h2 class="section-title">Busca un término</h2>
+    </div>
+    <label class="sr" for="glossSearch">Buscar en el glosario</label>
+    <input class="glossary-search" id="glossSearch" type="search" placeholder="Buscar: ROI, inflación, stablecoin, P2P…" autocomplete="off">
+    <p class="gloss-count" id="glossCount" aria-live="polite"></p>
+    <div class="grid grid-3" id="glossGrid" style="margin-top:12px;"></div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a href="#inicio" class="brand" style="margin-bottom:10px; display:inline-flex;">
+          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="18" stroke="#14B8B0" stroke-width="2.2"/><path d="M20 8 L24 20 L20 32 L16 20 Z" fill="#F57C00"/><circle cx="20" cy="20" r="2.4" fill="#fff"/></svg>
+          Brújula Financiera UBV
+        </a>
+        <p style="color:rgba(255,255,255,.65); font-size:.86rem; max-width:40ch;">Universidad Bolivariana de Venezuela — Centro de Estudios de Comunicación Social y Tecnologías Libres.</p>
+        <div class="foot-social" id="footSocial"></div>
+      </div>
+      <div>
+        <h4>Aprender</h4>
+        <ul class="foot-links">
+          <li><a href="#bursatil">Mercado bursátil</a></li>
+          <li><a href="#cripto">Cripto &amp; P2P</a></li>
+          <li><a href="#emprendedor">Finanzas emprendedoras</a></li>
+          <li><a href="#personal">Finanzas personales</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Recursos</h4>
+        <ul class="foot-links">
+          <li><a href="#herramientas">Herramientas</a></li>
+          <li><a href="#observatorio">Observatorio</a></li>
+          <li><a href="#glosario">Glosario</a></li>
+          <li><a href="#dashboard">Mi progreso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-disclaimer">
+      Brújula Financiera UBV es una plataforma educativa e informativa. Sus calculadoras, simuladores y contenidos tienen finalidad pedagógica y no constituyen asesoría financiera personalizada, recomendación de inversión, oferta de valores ni garantía de rentabilidad.
+      <br><br>
+      Autor: Reinaldo Soto — Universidad Bolivariana de Venezuela · Versión 2.0 · Octubre 2026
+    </div>
+  </div>
+</footer>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="mobnav" aria-label="Navegación rápida">
+  <a href="#inicio" data-k="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Inicio</a>
+  <a href="#bursatil" data-k="aprender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 7l10-4 10 4-10 4z"/><path d="M6 9v5c0 1.7 2.7 3 6 3s6-1.3 6-3V9"/></svg>Aprender</a>
+  <a href="#herramientas" data-k="herramientas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>Herramientas</a>
+  <a href="#glosario" data-k="glosario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h6a3 3 0 013 3v13a2 2 0 00-2-2H4z"/><path d="M20 4h-6a3 3 0 00-3 3v13a2 2 0 012-2h7z"/></svg>Glosario</a>
+  <a href="#dashboard" data-k="progreso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5L7 21l5-3 5 3-1.5-8.5"/></svg>Progreso</a>
+</nav>
+
+<button class="to-top" id="toTop" aria-label="Volver arriba"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 15l6-6 6 6"/></svg></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — edita aquí al publicar
+   ===================================================================== */
+const CONFIG = {
+  // Pega aquí la dirección pública definitiva (ej. https://brujula-ubv.netlify.app)
+  // para que "Compartir" y "Copiar enlace" usen siempre esa URL.
+  sitioURL: '',
+  whatsapp: '584147722027', // 0414-7722027 en formato internacional
+  instagram: 'sreinaldo68',
+  x: 'rsoto41'
+};
+
+/* ============ ESTADO (persistente en este navegador) ============ */
+const STORE_KEY='bf-progreso-v2';
+const state={tools:[], exp:[], retos:[], checks:[], nivel:1};
+function load(){ try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)||'null'); if(s) Object.assign(state,s); }catch(e){} }
+function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }catch(e){} }
+load();
+
+/* ============ HELPERS ============ */
+const $=(id)=>document.getElementById(id);
+const num=(id)=>{ const v=parseFloat($(id).value); return isFinite(v)?v:0; };
+const fmt=(n,dec=2)=> isFinite(n) ? Number(n).toLocaleString('es-VE',{minimumFractionDigits:dec,maximumFractionDigits:dec}) : '–';
+const fmtShort=(n)=>{ const a=Math.abs(n); if(a>=1e6) return fmt(n/1e6,1)+' M'; if(a>=1e4) return fmt(n/1e3,0)+' k'; if(a>=1000) return fmt(n/1e3,1)+' k'; return fmt(n, a<10&&a!==0?1:0); };
+const esc=(s)=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=(s)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+function onInputs(ids,fn){ ids.forEach(id=>$(id).addEventListener('input',fn)); }
+let toastT; function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),3200); }
+
+/* ============ TEMA ============ */
+function syncThemeBtn(){
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  $('themeToggle').setAttribute('aria-label', dark?'Cambiar a tema claro':'Cambiar a tema oscuro');
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', dark?'#0E1626':'#0B1F3A');
+}
+$('themeToggle').addEventListener('click',()=>{
+  const r=document.documentElement; const next=r.getAttribute('data-theme')==='dark'?'light':'dark';
+  r.setAttribute('data-theme',next); try{ localStorage.setItem('bf-tema',next); }catch(e){}
+  syncThemeBtn();
+});
+syncThemeBtn();
+
+/* ============ NAVEGACIÓN ============ */
+const navItems=[
+  ['inicio','Inicio','🏠'],['bursatil','Mercado bursátil','📈'],['cripto','Cripto & P2P','₿'],['emprendedor','Finanzas emprendedoras','💳'],
+  ['personal','Finanzas personales','💰'],['herramientas','Herramientas','🧮'],['transmedia','Transmedia','🌐'],['observatorio','Observatorio','🔎'],['glosario','Glosario','📚'],['dashboard','Mi progreso','🏅']
+];
+$('navlinks').innerHTML=navItems.filter(n=>!['inicio','dashboard','observatorio'].includes(n[0])).map(([id,t])=>`<li><a href="#${id}" data-sec="${id}">${esc(t)}</a></li>`).join('');
+$('drawerLinks').innerHTML=navItems.map(([id,t,e])=>`<a href="#${id}" data-sec="${id}"><span aria-hidden="true">${e}</span>${esc(t)}</a>`).join('');
+function setMenu(open){
+  document.body.classList.toggle('menu-open',open);
+  $('menuBtn').setAttribute('aria-expanded',open);
+  if(open) $('menuClose').focus();
+}
+$('menuBtn').addEventListener('click',()=>setMenu(true));
+$('menuClose').addEventListener('click',()=>setMenu(false));
+$('drawerBg').addEventListener('click',()=>setMenu(false));
+$('drawerLinks').addEventListener('click',e=>{ if(e.target.closest('a')) setMenu(false); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && document.body.classList.contains('menu-open')){ setMenu(false); $('menuBtn').focus(); } });
+
+/* Scrollspy: barra inferior + menú superior + menú lateral */
+const mobMap={inicio:'inicio',bienvenida:'inicio',dashboard:'progreso',bursatil:'aprender',cripto:'aprender',emprendedor:'aprender',personal:'aprender',herramientas:'herramientas',transmedia:'aprender',gamificacion:'progreso',observatorio:'aprender',glosario:'glosario'};
+const allSections=[...document.querySelectorAll('main section[id]')];
+let spyRaf=null;
+function spy(){
+  spyRaf=null;
+  const y=window.scrollY+window.innerHeight*0.3;
+  let cur='inicio';
+  for(const s of allSections){ if(s.offsetTop<=y) cur=s.id; }
+  if(window.innerHeight+window.scrollY>=document.body.scrollHeight-4) cur=allSections[allSections.length-1].id;
+  document.querySelectorAll('.mobnav a').forEach(a=>a.classList.toggle('active',a.dataset.k===mobMap[cur]));
+  document.querySelectorAll('[data-sec]').forEach(a=>a.classList.toggle('active',a.dataset.sec===cur));
+  $('toTop').classList.toggle('show',window.scrollY>900);
+}
+window.addEventListener('scroll',()=>{ if(!spyRaf) spyRaf=requestAnimationFrame(spy); },{passive:true});
+$('toTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ============ GRÁFICOS SVG (sin librerías externas) ============ */
+const charts={};
+function lineChart(id,cfg){ charts[id]={type:'line',cfg}; drawLine(id); }
+function drawLine(id){
+  const el=$(id), {labels,series,xTitle}=charts[id].cfg;
+  const W=Math.max(el.clientWidth||320,260), H=240, pl=48, pr=12, pt=10, pb=xTitle?40:26;
+  const all=series.flatMap(s=>s.data).filter(isFinite);
+  let max=Math.max(...all,0), min=Math.min(...all,0);
+  if(max===min) max=min+1;
+  const step=niceStep((max-min)/4); max=Math.ceil(max/step)*step; min=Math.floor(min/step)*step;
+  const n=Math.max(...series.map(s=>s.data.length));
+  const X=i=>pl+(n<=1?0:i*(W-pl-pr)/(n-1)), Y=v=>pt+(max-v)*(H-pt-pb)/(max-min);
+  let g='<g class="axis">';
+  for(let v=min; v<=max+1e-9; v+=step){ g+=`<line class="grid-l" x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${pl-8}" y="${Y(v)+4}" text-anchor="end">${fmtShort(v)}</text>`; }
+  const every=Math.max(1,Math.ceil(n/(W<420?5:8)));
+  const idx=[]; for(let i=0;i<n;i+=every) idx.push(i);
+  if(idx[idx.length-1]!==n-1){ if(n-1-idx[idx.length-1]<every*0.6) idx.pop(); idx.push(n-1); }
+  idx.forEach((i,k)=>{ const anc=k===0&&idx.length>1?'start':(i===n-1&&n>1?'end':'middle'); g+=`<text x="${X(i)}" y="${H-pb+16}" text-anchor="${anc}">${esc(labels[i]??'')}</text>`; });
+  if(xTitle) g+=`<text x="${(pl+W-pr)/2}" y="${H-4}" text-anchor="middle" style="font-weight:600">${esc(xTitle)}</text>`;
+  g+='</g>';
+  let p='';
+  series.forEach(s=>{
+    const pts=s.data.map((v,i)=>`${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
+    if(s.fill) p+=`<path d="M${X(0)},${Y(Math.max(min,0))} L${pts.join(' L')} L${X(s.data.length-1)},${Y(Math.max(min,0))} Z" style="fill:var(${s.color});opacity:.14"/>`;
+    p+=`<polyline points="${pts.join(' ')}" fill="none" style="stroke:var(${s.color})" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+  if(charts[id].cfg.marker){ const m=charts[id].cfg.marker; if(m.x>=0&&m.x<n) p+=`<line x1="${X(m.x)}" x2="${X(m.x)}" y1="${pt}" y2="${H-pb}" style="stroke:var(--texto-suave)" stroke-dasharray="4 4"/><circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" style="fill:var(--card-bg);stroke:var(--c2)" stroke-width="2.5"/>`; }
+  const legend=series.length>1||charts[id].cfg.legend ? `<div class="legend">${series.map(s=>`<span><i style="background:var(${s.color})"></i>${esc(s.name)}</span>`).join('')}</div>` : '';
+  el.innerHTML=`${legend}<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(charts[id].cfg.aria||'Gráfico')}">${g}${p}<line class="hair" x1="0" x2="0" y1="${pt}" y2="${H-pb}" style="stroke:var(--texto-suave);opacity:0" stroke-width="1"/></svg><div class="tip"></div>`;
+  const svg=el.querySelector('svg'), tip=el.querySelector('.tip'), hair=el.querySelector('.hair');
+  const move=(ev)=>{
+    const r=svg.getBoundingClientRect(); const cx=(ev.clientX-r.left)*(W/r.width);
+    const i=Math.max(0,Math.min(n-1,Math.round((cx-pl)/((W-pl-pr)/Math.max(n-1,1)))));
+    hair.setAttribute('x1',X(i)); hair.setAttribute('x2',X(i)); hair.style.opacity=.5;
+    tip.innerHTML=`<b>${esc(charts[id].cfg.tipLabel?charts[id].cfg.tipLabel(labels[i]):labels[i])}</b>`+series.map(s=>`${esc(s.name)}: ${fmt(s.data[i],2)}`).join('<br>');
+    const px=X(i)*r.width/W; tip.style.left=Math.min(Math.max(px-70,0),r.width-150)+'px'; tip.style.top=(legend?28:0)+'px'; tip.classList.add('show');
+  };
+  const leave=()=>{ tip.classList.remove('show'); hair.style.opacity=0; };
+  svg.addEventListener('pointermove',move); svg.addEventListener('pointerdown',move); svg.addEventListener('pointerleave',leave);
+}
+function niceStep(raw){ if(raw<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(raw))); const f=raw/p; return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p; }
+function donutChart(id,cfg){ charts[id]={type:'donut',cfg}; drawDonut(id); }
+function drawDonut(id){
+  const el=$(id), {items,center}=charts[id].cfg; const total=items.reduce((a,b)=>a+Math.max(b.value,0),0)||1;
+  const R=70, C=2*Math.PI*R; let off=0;
+  const arcs=items.map(it=>{ const len=Math.max(it.value,0)/total*C; const s=`<circle cx="95" cy="95" r="${R}" fill="none" style="stroke:var(${it.color})" stroke-width="26" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 95 95)"/>`; off+=len; return s; }).join('');
+  el.innerHTML=`<div class="donut-wrap"><svg viewBox="0 0 190 190" role="img" aria-label="${esc(cfg_aria(items))}"><circle cx="95" cy="95" r="${R}" fill="none" style="stroke:var(--gris-linea)" stroke-width="26"/>${arcs}<text x="95" y="91" text-anchor="middle" style="fill:var(--texto-suave);font-size:11px">${esc(center.label)}</text><text x="95" y="110" text-anchor="middle" style="fill:var(--valor);font-size:17px;font-weight:700;font-family:'Space Grotesk',sans-serif">${esc(center.value)}</text></svg><div class="donut-legend">${items.map(it=>`<div><i style="background:var(${it.color})"></i>${esc(it.name)}<span>${fmt(it.value,2)} · ${fmt(Math.max(it.value,0)/total*100,0)}%</span></div>`).join('')}</div></div>`;
+}
+function cfg_aria(items){ return 'Distribución: '+items.map(i=>i.name+' '+fmt(i.value,2)).join(', '); }
+let rsT; window.addEventListener('resize',()=>{ clearTimeout(rsT); rsT=setTimeout(()=>{ Object.keys(charts).forEach(id=>charts[id].type==='line'?drawLine(id):drawDonut(id)); },150); });
+
+/* ============ PROGRESO Y GAMIFICACIÓN ============ */
+const TOOLS=['equilibrio','precios','roi','p2p','dividendos','conversor','interes','presupuesto','amortizacion'];
+const EXPS=['bursatil','cripto','emprendedor','personal','herramientas','transmedia','gamificacion','observatorio','glosario','bienvenida'];
+const RETOS={presupuestoPersonal:'Resumen de presupuesto personal',crowdfunding:'Simulación de financiamiento colaborativo',checklist:'Checklist P2P al 100%',glosario:'Búsqueda en el glosario'};
+const levels=[
+  {n:1,t:'Explorador Financiero',d:'Da tus primeros pasos por la plataforma.',ok:()=>true},
+  {n:2,t:'Aprendiz Financiero',d:'Completa tu primer presupuesto y usa una calculadora.',ok:()=>state.retos.includes('presupuestoPersonal')&&state.tools.length>=1},
+  {n:3,t:'Gestor Financiero',d:'Usa al menos tres herramientas del laboratorio.',ok:()=>state.tools.length>=3},
+  {n:4,t:'Emprendedor Financiero',d:'Completa punto de equilibrio, precios y ROI.',ok:()=>['equilibrio','precios','roi'].every(t=>state.tools.includes(t))},
+  {n:5,t:'Ciudadano Financiero Digital',d:'Completa el checklist de seguridad P2P al 100%.',ok:()=>state.retos.includes('checklist')},
+];
+function currentLevel(){ let n=1; for(const l of levels){ if(l.ok()) n=l.n; else break; } return n; }
+function markTool(name){ if(!state.tools.includes(name)){ state.tools.push(name); save(); updateProgress(); } }
+function markExp(name){ if(!state.exp.includes(name)){ state.exp.push(name); save(); updateProgress(); } }
+function markReto(name,on=true){
+  const has=state.retos.includes(name);
+  if(on&&!has){ state.retos.push(name); save(); updateProgress(); }
+  if(!on&&has){ state.retos=state.retos.filter(r=>r!==name); save(); updateProgress(); }
+}
+function updateProgress(initial){
+  const t=state.tools.length, e=state.exp.length, r=state.retos.length;
+  $('statHerr').innerHTML=`${t}<small>/9</small>`;
+  $('statCont').innerHTML=`${e}<small>/10</small>`;
+  $('statRetos').innerHTML=`${r}<small>/4</small>`;
+  const pct=Math.round((t+e+r)/23*100);
+  $('dashProgress').style.width=pct+'%'; $('heroProgress').style.width=Math.max(pct,3)+'%';
+  $('progressPct').textContent=pct+'%'; $('heroPct').textContent=pct+'%';
+  $('heroBarWrap').setAttribute('aria-valuenow',pct);
+  $('progressText').textContent=`${t} herramientas · ${e} secciones · ${r} retos`;
+  const steps=document.querySelectorAll('#routeSteps span'); const on=Math.min(5,Math.ceil(pct/20));
+  steps.forEach((s,i)=>s.classList.toggle('on',i<on));
+  const lv=currentLevel();
+  $('statNivel').textContent=lv; $('statNivelTxt').textContent='Nivel: '+levels[lv-1].t;
+  const next=levels[lv]; $('nextHint').textContent= next ? `Próximo nivel — ${next.t}: ${next.d}` : '¡Completaste todos los niveles! 🎉';
+  document.querySelectorAll('.tool-card').forEach(c=>c.classList.toggle('done',state.tools.includes(c.dataset.tool)));
+  document.querySelectorAll('#toolIndex a').forEach(a=>a.classList.toggle('done',state.tools.includes(a.dataset.tool)));
+  $('levelGrid').innerHTML=levels.map(l=>{
+    const unlocked=l.n<=lv;
+    return `<div class="card level-card ${unlocked?'':'locked'} ${l.n===lv?'current':''}">
+      <span class="level-state" aria-hidden="true">${unlocked?'✅':'🔒'}</span>
+      <span class="level-num">NIVEL ${l.n}</span>
+      <h4 style="margin:8px 0 4px; font-size:.98rem;">${esc(l.t)}</h4>
+      <p style="font-size:.82rem; margin:0;">${esc(l.d)}</p>
+      <span class="sr">${unlocked?'Desbloqueado':'Bloqueado'}</span>
+    </div>`;}).join('');
+  if(!initial && lv>state.nivel){ toast(`🏅 ¡Subiste al nivel ${lv}: ${levels[lv-1].t}!`); }
+  if(lv!==state.nivel){ state.nivel=lv; save(); }
+}
+$('resetBtn').addEventListener('click',()=>{
+  const b=$('resetBtn');
+  if(b.dataset.confirm!=='1'){ b.dataset.confirm='1'; b.textContent='¿Seguro? Toca otra vez para borrar'; setTimeout(()=>{ b.dataset.confirm=''; b.textContent='Reiniciar mi progreso'; },4000); return; }
+  Object.assign(state,{tools:[],exp:[],retos:[],checks:[],nivel:1}); save();
+  document.querySelectorAll('#checklistWrap input').forEach(i=>i.checked=false); updateChecklist(true);
+  b.dataset.confirm=''; b.textContent='Reiniciar mi progreso'; updateProgress(true); toast('Progreso reiniciado');
+});
+/* Secciones exploradas: cuentan al verse en pantalla */
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(ents=>ents.forEach(en=>{
+    if(!en.isIntersecting) return;
+    const id=en.target.id;
+    if(EXPS.includes(id)) markExp(id);
+    if(en.target.dataset.tool==='dividendos') markTool('dividendos');
+    io.unobserve(en.target);
+  }),{threshold:.25});
+  document.querySelectorAll('[data-exp], #bienvenida, #tool-dividendos').forEach(s=>io.observe(s));
+}
+
+/* ============ ONBOARDING ============ */
+const onboardOptions=[
+  {emoji:'💰',title:'Organizar mi dinero',desc:'Presupuesto, ahorro y planificación personal.',target:'personal'},
+  {emoji:'🚀',title:'Mejorar mi emprendimiento',desc:'Precios, márgenes y punto de equilibrio.',target:'tool-equilibrio'},
+  {emoji:'📈',title:'Conocer el mercado bursátil',desc:'Aprende antes de invertir, paso a paso.',target:'bursatil'},
+  {emoji:'₿',title:'Comprender los criptoactivos',desc:'Stablecoins, riesgos y seguridad P2P.',target:'cripto'},
+  {emoji:'💳',title:'Aprender sobre crédito',desc:'Costo del crédito, fintech y amortización.',target:'emprendedor'},
+];
+$('onboardGrid').innerHTML=onboardOptions.map(o=>`
+  <button type="button" class="card onboard-card" data-target="${o.target}">
+    <div class="emoji" aria-hidden="true">${o.emoji}</div>
+    <div><h4 style="margin:10px 0 4px; font-size:1rem;">${esc(o.title)}</h4>
+    <p style="font-size:.86rem; margin:0;">${esc(o.desc)}</p></div>
+  </button>`).join('');
+$('onboardGrid').addEventListener('click',e=>{ const b=e.target.closest('[data-target]'); if(b){ const t=$(b.dataset.target); t.scrollIntoView({behavior:'smooth'}); } });
+
+/* ============ BURSÁTIL — PASOS ============ */
+const steps=[
+  {t:'Conoce el mercado',d:'La Bolsa de Valores de Caracas es el espacio donde se negocian públicamente acciones y otros instrumentos financieros venezolanos.'},
+  {t:'Conoce los requisitos',d:'Generalmente se requiere identificación, apertura de cuenta con una casa de bolsa autorizada y cumplir con la normativa vigente. Verifica siempre con fuentes oficiales.'},
+  {t:'Conoce cómo registrarte',d:'El registro se realiza a través de una casa de bolsa autorizada, que actúa como intermediaria entre el inversionista y el mercado.'},
+  {t:'Conoce los instrumentos',d:'Acciones y otros títulos negociados en el mercado, cada uno con características, riesgos y liquidez distintos.'},
+  {t:'Comprende los riesgos',d:'El valor de un instrumento puede subir o bajar; ningún instrumento del mercado ofrece un rendimiento garantizado.'},
+  {t:'Simula antes de decidir',d:'Usa las calculadoras del laboratorio financiero (punto de equilibrio, ROI, interés compuesto) para practicar con números antes de operar con dinero real.',link:'#herramientas'},
+];
+let stepIdx=0;
+$('stepTrack').innerHTML=steps.map((s,i)=>`<button type="button" class="step-chip" role="tab" id="stepTab${i}" aria-selected="${i===0}" data-i="${i}">PASO ${i+1}<small>${esc(s.t)}</small></button>`).join('');
+function renderStep(i){
+  stepIdx=i; const s=steps[i];
+  document.querySelectorAll('.step-chip').forEach(c=>c.setAttribute('aria-selected',c.dataset.i==i));
+  $('stepDetail').innerHTML=`<h4>Paso ${i+1} de ${steps.length} — ${esc(s.t)}</h4><p style="margin:0;">${esc(s.d)}</p>
+    ${s.link?`<a class="btn btn-primary btn-sm" style="margin-top:12px" href="${s.link}">Ir al laboratorio →</a>`:''}
+    <p class="observ-source">Fuente: contenido educativo elaborado por Brújula Financiera UBV.</p>
+    <div class="step-nav"><button class="btn btn-ghost btn-sm" type="button" data-go="-1" ${i===0?'disabled style="opacity:.4"':''}>← Anterior</button><button class="btn btn-ghost btn-sm" type="button" data-go="1" ${i===steps.length-1?'disabled style="opacity:.4"':''}>Siguiente →</button></div>`;
+  $('stepDetail').setAttribute('aria-labelledby','stepTab'+i);
+}
+$('stepTrack').addEventListener('click',e=>{ const c=e.target.closest('.step-chip'); if(c) renderStep(+c.dataset.i); });
+$('stepDetail').addEventListener('click',e=>{ const b=e.target.closest('[data-go]'); if(b){ const n=stepIdx+ +b.dataset.go; if(n>=0&&n<steps.length){ renderStep(n); $('stepTab'+n).scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}); } } });
+renderStep(0);
+
+/* ============ RENTA FIJA VS VARIABLE ============ */
+const rentaData={
+  'Renta fija':{riesgo:'Bajo a moderado',horizonte:'Corto a mediano plazo',liquidez:'Variable según el instrumento',rendimiento:'Generalmente predefinido o pactado',ejemplos:'Certificados, bonos, instrumentos de deuda',consideraciones:'El emisor puede incumplir; revisa su solvencia y las condiciones pactadas.'},
+  'Renta variable':{riesgo:'Moderado a alto',horizonte:'Mediano a largo plazo',liquidez:'Depende del volumen negociado',rendimiento:'No garantizado; depende del desempeño del instrumento',ejemplos:'Acciones y participaciones societarias',consideraciones:'El valor puede fluctuar de forma significativa en el corto plazo.'},
+};
+$('rentaTabs').innerHTML=Object.keys(rentaData).map((k,i)=>`<button type="button" class="tab-btn" role="tab" aria-selected="${i===0}" data-k="${k}">${k}</button>`).join('');
+function renderRenta(k){
+  const d=rentaData[k];
+  $('rentaDetail').innerHTML=`<h4 style="margin-bottom:10px;">${k}</h4>
+    <div class="result-row"><span>Riesgo</span><span class="v">${d.riesgo}</span></div>
+    <div class="result-row"><span>Horizonte</span><span class="v">${d.horizonte}</span></div>
+    <div class="result-row"><span>Liquidez</span><span class="v">${d.liquidez}</span></div>
+    <div class="result-row"><span>Rendimiento</span><span class="v">${d.rendimiento}</span></div>
+    <div class="result-row"><span>Ejemplos</span><span class="v">${d.ejemplos}</span></div>
+    <p style="margin:12px 0 0;">${d.consideraciones}</p>`;
+}
+renderRenta('Renta fija');
+$('rentaTabs').addEventListener('click',e=>{ const b=e.target.closest('.tab-btn'); if(!b) return;
+  document.querySelectorAll('#rentaTabs .tab-btn').forEach(x=>x.setAttribute('aria-selected',x===b)); renderRenta(b.dataset.k); });
+
+/* ============ INSTRUMENTOS PRODUCTIVOS ============ */
+const instrumentos=[
+  {t:'Certificados de Inversión Ganadera',q:'Instrumento vinculado al financiamiento de proyectos del sector pecuario.',c:'Canaliza recursos de inversionistas hacia proyectos ganaderos, generalmente a través de una figura de participación o deuda.',r:'Revisa el emisor, el respaldo del proyecto y las condiciones de salida antes de participar.',rg:'Riesgo asociado al desempeño del sector agropecuario y a la solvencia del emisor.'},
+  {t:'Instrumentos del sector turismo',q:'Instrumentos orientados a financiar proyectos e infraestructura turística.',c:'Canaliza capital hacia el desarrollo o la operación de proyectos turísticos, bajo distintas figuras de participación.',r:'Revisa el proyecto específico, su solvencia y su exposición a la estacionalidad del sector.',rg:'Riesgo asociado a la demanda turística y a la ejecución del proyecto.'},
+];
+$('instrumentosGrid').innerHTML=instrumentos.map(i=>`
+  <div class="card">
+    <h4>${i.t}</h4>
+    <p><strong>¿Qué es?</strong> ${i.q}</p>
+    <p><strong>¿Cómo funciona?</strong> ${i.c}</p>
+    <p><strong>¿Qué debo revisar?</strong> ${i.r}</p>
+    <p><strong>Riesgos:</strong> ${i.rg}</p>
+    <p class="observ-source">Ejemplo demostrativo con fines educativos · Fuente: contenido educativo Brújula Financiera UBV.</p>
+  </div>`).join('');
+
+/* ============ CHECKLIST P2P ============ */
+const checklistItems=['Activé la autenticación multifactor (2FA).','Verifiqué la identidad de la contraparte.','Revisé la reputación y el historial de operaciones.','Confirmé los datos de la orden.','No compartí códigos de seguridad.','Verifiqué que el pago llegó a mi cuenta antes de liberar.','Conservé evidencia (capturas, comprobantes).','Evité operaciones fuera de la plataforma.'];
+$('checklistWrap').innerHTML=checklistItems.map((t,i)=>`<label class="check-row"><input type="checkbox" data-i="${i}" ${state.checks.includes(i)?'checked':''}><span>${esc(t)}</span></label>`).join('');
+function updateChecklist(initial){
+  const boxes=[...document.querySelectorAll('#checklistWrap input')];
+  state.checks=boxes.filter(b=>b.checked).map(b=>+b.dataset.i);
+  const pct=Math.round(state.checks.length/boxes.length*100);
+  $('checkPct').textContent=pct+'%'; $('checkBar').style.width=pct+'%';
+  $('checkMsg').classList.toggle('show',pct===100);
+  save();
+  if(initial!==true) markReto('checklist',pct===100);
+}
+$('checklistWrap').addEventListener('change',updateChecklist);
+updateChecklist(true);
+
+/* ============ CRÉDITO ============ */
+const creditoTopics=[
+  {t:'Fintech',d:'Empresas que usan tecnología para ofrecer servicios financieros, muchas veces de forma más ágil que la banca tradicional.'},
+  {t:'Créditos digitales',d:'Financiamiento solicitado y gestionado a través de plataformas digitales, con procesos de aprobación generalmente más rápidos.'},
+  {t:'Créditos en divisas',d:'Financiamiento denominado en moneda extranjera; implica comprender el tipo de cambio y su variación durante el plazo.'},
+  {t:'Capacidad de pago',d:'La proporción del ingreso que puede destinarse a cubrir una deuda sin comprometer gastos esenciales.'},
+  {t:'Costo del crédito',d:'Incluye la tasa de interés, comisiones y cargos adicionales; compara el costo total, no solo la tasa.'},
+  {t:'Endeudamiento',d:'El nivel de compromisos financieros asumidos frente a los ingresos disponibles.'},
+  {t:'Financiamiento',d:'Recursos obtenidos de terceros (crédito, inversión, aportes) para sostener o hacer crecer un proyecto.'},
+  {t:'Simula tu crédito',d:'Calcula la cuota, los intereses totales y cuánto ahorras con pagos extraordinarios.',link:'#tool-amortizacion'},
+];
+$('creditoGrid').innerHTML=creditoTopics.map(c=>c.link
+  ? `<a class="card" href="${c.link}" style="text-decoration:none; border-color:var(--naranja);"><h4 style="font-size:.98rem; color:var(--naranja);">${c.t} →</h4><p style="font-size:.88rem; margin:0;">${c.d}</p></a>`
+  : `<div class="card"><h4 style="font-size:.98rem;">${c.t}</h4><p style="font-size:.88rem; margin:0;">${c.d}</p></div>`).join('');
+
+/* ============ FINANCIAMIENTO COLABORATIVO ============ */
+function calcCrowdfunding(){
+  const cap=num('cfCapital'), part=num('cfPart'), aporte=num('cfAporte');
+  const reunido=part*aporte, faltante=Math.max(cap-reunido,0), pct=cap>0?Math.min(reunido/cap*100,999):0;
+  $('cfReunido').textContent=fmt(reunido,2); $('cfFaltante').textContent=fmt(faltante,2); $('cfPct').textContent=fmt(pct,0)+'%';
+  $('cfBar').style.width=Math.min(pct,100)+'%';
+  $('cfNecesarios').textContent = aporte>0&&cap>0 ? (faltante>0 ? `Con aportes de ${fmt(aporte,2)} necesitas ${fmt(Math.ceil(cap/aporte),0)} participantes en total (te faltan ${fmt(Math.ceil(faltante/aporte),0)}).` : `¡Meta alcanzada! Bastaban ${fmt(Math.ceil(cap/aporte),0)} participantes.`) : '';
+}
+onInputs(['cfCapital','cfPart','cfAporte'],()=>{ calcCrowdfunding(); markReto('crowdfunding'); });
+calcCrowdfunding();
+
+/* ============ PRESUPUESTO PERSONAL ============ */
+$('pForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const ing=num('pIngreso'), fij=num('pFijos'), vari=num('pVariables'), aho=num('pAhorro');
+  const restante=ing-fij-vari-aho; let html='';
+  if(ing<=0){ html='<p style="margin:0">Ingresa tu ingreso mensual para ver el resumen.</p>'; }
+  else{
+    const pA=aho/ing*100, pF=fij/ing*100, pV=vari/ing*100;
+    html=`<div class="result-row"><span>Gastos fijos</span><span class="v">${fmt(fij,2)} · ${fmt(pF,0)}%</span></div>
+      <div class="result-row"><span>Gastos variables</span><span class="v">${fmt(vari,2)} · ${fmt(pV,0)}%</span></div>
+      <div class="result-row"><span>Ahorro</span><span class="v">${fmt(aho,2)} · ${fmt(pA,1)}%</span></div>
+      <div class="result-row"><span>${restante>=0?'Margen sin asignar':'Déficit'}</span><span class="v" style="color:${restante>=0?'var(--c1)':'var(--rojo)'}">${fmt(Math.abs(restante),2)}</span></div>
+      <p style="margin:10px 0 0; font-size:.88rem; color:var(--texto)">${restante<0?'Tus gastos y ahorro superan el ingreso; conviene revisar los gastos variables primero.': pA<10 ? 'Buen inicio. Intenta llevar el ahorro hacia un 10–20% del ingreso cuando sea posible.' : 'Muy bien: estás reservando una parte significativa de tu ingreso para el ahorro.'}</p>`;
+    markReto('presupuestoPersonal');
+  }
+  $('pResult').style.display='block'; $('pResult').innerHTML=html;
+});
+
+/* ============ 1. PUNTO DE EQUILIBRIO ============ */
+function calcEquilibrio(){
+  const fijos=num('eqFijos'), varU=num('eqVarUnit'), precio=num('eqPrecio');
+  const margenU=precio-varU, ok=margenU>0;
+  const unidades= ok ? fijos/margenU : NaN;
+  $('eqUnidades').textContent= ok ? fmt(Math.ceil(unidades),0)+' u.' : '–';
+  $('eqMonto').textContent= ok ? fmt(Math.ceil(unidades)*precio,2) : '–';
+  $('eqMargen').textContent=fmt(margenU,2)+' / u.';
+  $('eqWarn').classList.toggle('show',!ok && precio>0);
+  const maxU=ok?Math.max(Math.ceil(unidades*2),10):100, pts=[];
+  for(let i=0;i<=10;i++) pts.push(Math.round(maxU*i/10));
+  lineChart('chartEquilibrio',{labels:pts,xTitle:'Unidades vendidas',aria:'Ingresos frente a costos totales',tipLabel:l=>l+' unidades',
+    series:[{name:'Ingresos',color:'--c1',data:pts.map(u=>u*precio)},{name:'Costos totales',color:'--c2',data:pts.map(u=>fijos+u*varU)}],
+    marker: ok ? {x:unidades/maxU*10, y:unidades*precio} : null});
+}
+onInputs(['eqFijos','eqVarUnit','eqPrecio'],()=>{ calcEquilibrio(); markTool('equilibrio'); });
+
+/* ============ 2. PRECIOS Y MÁRGENES ============ */
+const presets={
+  '🍰 Repostería':{ins:2.5,mo:1.2,emp:0.3,tra:0.4,com:5,otr:0.2,pre:7},
+  '🥖 Panadería':{ins:1.1,mo:0.6,emp:0.15,tra:0.2,com:3,otr:0.1,pre:2.5},
+  '🍔 Alimentos':{ins:3.2,mo:1.8,emp:0.4,tra:0.5,com:6,otr:0.3,pre:9.5},
+  '💻 Servicios digitales':{ins:0,mo:15,emp:0,tra:0,com:4,otr:1,pre:35},
+};
+$('presetRow').innerHTML=Object.keys(presets).map(k=>`<button type="button" class="preset-btn" data-k="${k}">${k}</button>`).join('');
+$('presetRow').addEventListener('click',e=>{ const b=e.target.closest('.preset-btn'); if(!b) return;
+  const p=presets[b.dataset.k];
+  [['pmInsumos','ins'],['pmManoObra','mo'],['pmEmpaque','emp'],['pmTransporte','tra'],['pmComision','com'],['pmOtros','otr'],['pmPrecio','pre']].forEach(([id,k])=>$(id).value=p[k]);
+  document.querySelectorAll('.preset-btn').forEach(x=>x.classList.toggle('on',x===b));
+  calcPrecios(); markTool('precios'); });
+function calcPrecios(){
+  const base=num('pmInsumos')+num('pmManoObra')+num('pmEmpaque')+num('pmTransporte')+num('pmOtros');
+  const comPct=num('pmComision'), precio=num('pmPrecio');
+  const costoTotal=base+precio*comPct/100, ganancia=precio-costoTotal;
+  const mB=precio>0?(precio-base)/precio*100:0, mN=precio>0?ganancia/precio*100:0, mk=costoTotal>0?ganancia/costoTotal*100:0;
+  $('pmCosto').textContent=fmt(costoTotal,2);
+  $('pmGanancia').textContent=fmt(ganancia,2); $('pmGanancia').style.color=ganancia<0?'var(--rojo)':'var(--c1)';
+  $('pmMargen').textContent=fmt(mB,1)+'% / '+fmt(mN,1)+'%';
+  $('pmMarkup').textContent=fmt(mk,1)+'%';
+  const sug=comPct<100 ? base/(1-0.30-comPct/100) : NaN;
+  $('pmSugerido').textContent= isFinite(sug)&&sug>0 ? `Referencia: para un margen neto del 30% con estos costos, el precio rondaría ${fmt(sug,2)}.` : '';
+}
+onInputs(['pmInsumos','pmManoObra','pmEmpaque','pmTransporte','pmComision','pmOtros','pmPrecio'],()=>{ calcPrecios(); markTool('precios'); });
+
+/* ============ 3. ROI ============ */
+function calcRoi(){
+  const r={};
+  ['A','B'].forEach(s=>{ const inv=num('roiInv'+s), g=num('roiIng'+s)-inv-num('roiCost'+s), roi=inv>0?g/inv*100:0;
+    $('roiGan'+s).textContent=fmt(g,2); $('roiPct'+s).textContent=fmt(roi,1)+'%'; r[s]=roi; });
+  const v=$('roiVeredicto');
+  if(Math.abs(r.A-r.B)<0.05) v.textContent='Ambos escenarios tienen un ROI prácticamente igual.';
+  else { const best=r.A>r.B?'A':'B'; v.textContent=`El escenario ${best} rinde ${fmt(Math.abs(r.A-r.B),1)} puntos porcentuales más por cada unidad invertida. Considera también el riesgo y el tiempo de cada uno.`; }
+}
+onInputs(['roiInvA','roiIngA','roiCostA','roiInvB','roiIngB','roiCostB'],()=>{ calcRoi(); markTool('roi'); });
+
+/* ============ 4. P2P ============ */
+function calcP2P(){
+  const monto=num('p2pMonto'), compra=num('p2pCompra'), venta=num('p2pVenta'), comPct=num('p2pComision'), otros=num('p2pOtros');
+  const costo=monto*compra*(1+comPct/100)+otros, ingreso=monto*venta, gan=ingreso-costo;
+  $('p2pCostoTotal').textContent='Bs. '+fmt(costo,2); $('p2pIngreso').textContent='Bs. '+fmt(ingreso,2);
+  $('p2pGanancia').textContent='Bs. '+fmt(gan,2); $('p2pGanancia').style.color=gan<0?'var(--rojo)':'var(--c1)';
+  $('p2pMargen').textContent=fmt(ingreso>0?gan/ingreso*100:0,2)+'%';
+  $('p2pRentab').textContent=fmt(costo>0?gan/costo*100:0,2)+'%';
+  $('p2pWarn').classList.toggle('show',gan<0);
+}
+onInputs(['p2pMonto','p2pCompra','p2pVenta','p2pComision','p2pOtros'],()=>{ calcP2P(); markTool('p2p'); });
+
+/* ============ 5. DIVIDENDOS (demo) ============ */
+const dividendosDemo=[
+  {emp:'Empresa A (ejemplo)',tk:'EJA',corte:'05/10/2026',pago:'20/10/2026',div:'0,015 por acción',yld:'—',fte:'Ejemplo demostrativo'},
+  {emp:'Empresa B (ejemplo)',tk:'EJB',corte:'12/10/2026',pago:'28/10/2026',div:'0,008 por acción',yld:'—',fte:'Ejemplo demostrativo'},
+  {emp:'Empresa C (ejemplo)',tk:'EJC',corte:'22/10/2026',pago:'05/11/2026',div:'0,021 por acción',yld:'—',fte:'Ejemplo demostrativo'},
+];
+const divCols=[['emp','Empresa'],['tk','Ticker'],['corte','Fecha de corte'],['pago','Fecha de pago'],['div','Dividendo'],['yld','Dividend yield'],['fte','Fuente']];
+$('divTable').innerHTML=dividendosDemo.map((d,i)=>`<tr data-i="${i}" style="cursor:pointer">${divCols.map(([k,l])=>`<td data-label="${l}">${esc(d[k])}</td>`).join('')}</tr>`).join('');
+$('divTable').addEventListener('click',e=>{ const tr=e.target.closest('tr'); if(!tr) return; const d=dividendosDemo[+tr.dataset.i];
+  const x=$('divExplica'); x.classList.add('show');
+  x.textContent=`Cómo leerlo: quien tenga acciones de ${d.emp} registradas al ${d.corte} (fecha de corte) recibiría ${d.div} el ${d.pago}. Ejemplo: con 10.000 acciones serían ${fmt(10000*parseFloat(d.div.replace(',','.')),2)} en total.`;
+  markTool('dividendos'); });
+
+/* ============ OBSERVATORIO (datos cargados manualmente) ============ */
+const observData=[
+  {t:'Tipo de cambio BCV',v:'Bs. 849,56 / USD',fte:'Banco Central de Venezuela · 21 sept. 2026'},
+  {t:'Inflación (INPC intermensual)',v:'8,9%',fte:'BCV, dato de agosto 2026'},
+  {t:'Índice Bursátil de Caracas (IBC)',v:'7.096,02 pts',fte:'Bolsa de Valores de Caracas · semana 15–18 sept. 2026'},
+  {t:'Tasa P2P referencial USDT',v:'≈ Bs. 953,53',fte:'Referencia de mercado P2P · 19 sept. 2026'},
+];
+$('observGrid').innerHTML=observData.map(o=>`
+  <div class="card">
+    <span class="observ-tag">DATO DE REFERENCIA</span>
+    <h4 class="observ-val">${esc(o.v)}</h4>
+    <p style="margin:0 0 4px; font-size:.86rem;">${esc(o.t)}</p>
+    <p class="observ-source">Fuente: ${esc(o.fte)}</p>
+  </div>`).join('');
+
+/* ============ 6. CONVERSOR (demo) ============ */
+const ratesUSD={USD:1,EUR:0.92,VES:849.56,USDT:1,USDC:1,BTC:1/62000,ETH:1/2600};
+const curNames={USD:'Dólar (USD)',EUR:'Euro (EUR)',VES:'Bolívar (VES)',USDT:'Tether (USDT)',USDC:'USD Coin (USDC)',BTC:'Bitcoin (BTC)',ETH:'Ether (ETH)'};
+const opts=(sel)=>Object.keys(ratesUSD).map(c=>`<option value="${c}" ${c===sel?'selected':''}>${curNames[c]}</option>`).join('');
+$('convDe').innerHTML=opts('USD'); $('convA').innerHTML=opts('VES');
+function calcConv(){
+  const monto=num('convMonto'), de=$('convDe').value, a=$('convA').value;
+  const res=monto/ratesUSD[de]*ratesUSD[a], cripto=['BTC','ETH'].includes(a);
+  $('convResultado').textContent=fmt(res,cripto?6:2)+' '+a;
+  $('convFuente').textContent='Modo demostración · Tasas de referencia fijas (USD/VES según BCV, 21 sept. 2026), sin conexión en vivo.';
+}
+onInputs(['convMonto','convDe','convA'],()=>{ calcConv(); markTool('conversor'); });
+$('convDe').addEventListener('change',()=>{ calcConv(); markTool('conversor'); });
+$('convA').addEventListener('change',()=>{ calcConv(); markTool('conversor'); });
+$('convSwap').addEventListener('click',()=>{ const d=$('convDe').value; $('convDe').value=$('convA').value; $('convA').value=d; calcConv(); markTool('conversor'); });
+
+/* ============ 7. INTERÉS COMPUESTO ============ */
+function calcInteres(){
+  const cap=num('icCapital'), aporte=num('icAporte'), tm=num('icTasa')/100/12, anios=Math.min(Math.max(Math.round(num('icTiempo')),0),50);
+  let saldo=cap, aportado=cap; const serie=[cap], serieAp=[cap];
+  for(let m=1;m<=anios*12;m++){ saldo=saldo*(1+tm)+aporte; aportado+=aporte; if(m%12===0){ serie.push(saldo); serieAp.push(aportado); } }
+  $('icAportado').textContent=fmt(aportado,2); $('icIntereses').textContent=fmt(saldo-aportado,2); $('icFinal').textContent=fmt(saldo,2);
+  lineChart('chartInteres',{labels:serie.map((_,i)=>'Año '+i),aria:'Crecimiento del capital',legend:true,
+    series:[{name:'Capital acumulado',color:'--c4',data:serie,fill:true},{name:'Solo aportes',color:'--c3',data:serieAp}]});
+}
+onInputs(['icCapital','icAporte','icTasa','icTiempo'],()=>{ calcInteres(); markTool('interes'); });
+
+/* ============ 8. 50/30/20 ============ */
+$('bPersonalizar').addEventListener('click',()=>{
+  const box=$('bCustomFields'), open=box.hidden; box.hidden=!open;
+  $('bPersonalizar').setAttribute('aria-expanded',open);
+  $('bPersonalizar').textContent=open?'Volver a 50 / 30 / 20':'Personalizar mi distribución';
+  calcPresupuesto(); markTool('presupuesto');
+});
+function calcPresupuesto(){
+  const ing=num('bIngreso'), custom=!$('bCustomFields').hidden;
+  const pn=custom?num('bPctNec'):50, pg=custom?num('bPctGas'):30, pa=custom?num('bPctAho'):20, suma=pn+pg+pa;
+  const nec=ing*pn/100, gas=ing*pg/100, aho=ing*pa/100;
+  $('bNec').textContent=`${fmt(nec,2)} (${fmt(pn,0)}%)`; $('bGas').textContent=`${fmt(gas,2)} (${fmt(pg,0)}%)`; $('bAho').textContent=`${fmt(aho,2)} (${fmt(pa,0)}%)`;
+  const w=$('bWarn'); w.classList.toggle('show',custom&&Math.abs(suma-100)>0.01); w.textContent=`Los porcentajes suman ${fmt(suma,0)}%. Ajústalos para que sumen 100%.`;
+  donutChart('chartPresupuesto',{center:{label:'Ingreso',value:fmtShort(ing)},items:[{name:'Necesidades',value:nec,color:'--c3'},{name:'Gastos discrecionales',value:gas,color:'--c2'},{name:'Ahorro / inversión',value:aho,color:'--c1'}]});
+}
+onInputs(['bIngreso','bPctNec','bPctGas','bPctAho'],()=>{ calcPresupuesto(); markTool('presupuesto'); });
+
+/* ============ 9. AMORTIZACIÓN ============ */
+function amortSchedule(monto,tasaAnual,plazo,extra){
+  const tm=tasaAnual/100/12, cuota= tm>0 ? monto*tm/(1-Math.pow(1+tm,-plazo)) : monto/plazo;
+  let saldo=monto, total=0, meses=0; const serie=[];
+  while(saldo>0.005 && meses<1200){ const it=saldo*tm; let pago=cuota+extra; if(pago>saldo+it) pago=saldo+it; saldo-=pago-it; total+=it; meses++; serie.push(total); }
+  return {cuota,meses,total,serie};
+}
+const mesesTxt=m=>{ const a=Math.floor(m/12), r=m%12; return m+' meses'+(a?` (${a} a${a>1?'ños':'ño'}${r?' y '+r+' m':''})`:''); };
+function calcAmortizacion(){
+  const monto=num('amMonto'), tasa=num('amTasa'), plazo=Math.max(Math.round(num('amPlazo')),1), extra=Math.max(num('amExtra'),0);
+  const n=amortSchedule(monto,tasa,plazo,0), e=amortSchedule(monto,tasa,plazo,extra);
+  $('amCuota').textContent=fmt(n.cuota,2); $('amTiempoN').textContent=mesesTxt(n.meses); $('amInteresN').textContent=fmt(n.total,2);
+  $('amTiempoE').textContent=mesesTxt(e.meses); $('amInteresE').textContent=fmt(e.total,2); $('amDif').textContent=fmt(n.total-e.total,2);
+  const L=Math.max(n.serie.length,e.serie.length), pad=s=>Array.from({length:L},(_,i)=>s[Math.min(i,s.length-1)]??0);
+  lineChart('chartAmort',{labels:Array.from({length:L},(_,i)=>i+1),xTitle:'Mes',aria:'Interés acumulado',tipLabel:l=>'Mes '+l,
+    series:[{name:'Interés — pago normal',color:'--c2',data:pad(n.serie)},{name:'Interés — con pago extra',color:'--c1',data:pad(e.serie)}]});
+}
+onInputs(['amMonto','amTasa','amPlazo','amExtra'],()=>{ calcAmortizacion(); markTool('amortizacion'); });
+
+/* ============ ÍNDICE DE HERRAMIENTAS ============ */
+const toolShort={equilibrio:'Punto de equilibrio',precios:'Precios y márgenes',roi:'ROI',p2p:'Rentabilidad P2P',dividendos:'Dividendos',conversor:'Conversor',interes:'Interés compuesto',presupuesto:'50/30/20',amortizacion:'Amortización'};
+$('toolIndex').innerHTML=[...document.querySelectorAll('.tool-card')].map((c,i)=>`<a href="#${c.id}" data-tool="${c.dataset.tool}">${i+1}. ${toolShort[c.dataset.tool]}</a>`).join('');
+
+/* ============ TRANSMEDIA ============ */
+const tmIcons={
+  web:'<svg viewBox="0 0 24 24" fill="none" stroke="#14B8B0" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>',
+  instagram:'<svg viewBox="0 0 24 24" fill="none" stroke="#F57C00" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 4l16 16M20 4L4 20"/></svg>',
+  tiktok:'<svg viewBox="0 0 24 24" fill="none" stroke="#14B8B0" stroke-width="1.8"><path d="M14 4v9.5a3.5 3.5 0 11-3-3.46"/><path d="M14 4c.5 2.2 2 3.6 4 4"/></svg>',
+  youtube:'<svg viewBox="0 0 24 24" fill="none" stroke="#F57C00" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 10l4 2-4 2z" fill="#F57C00" stroke="none"/></svg>',
+  whatsapp:'<svg viewBox="0 0 24 24" fill="none" stroke="#3CC27F" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 01-12.4 7.55L4 20l1.05-4.4A8.5 8.5 0 1121 11.5z"/><path d="M8.5 9.5c.3 2.6 2.4 4.7 5 5" stroke-linecap="round"/></svg>',
+  podcast:'<svg viewBox="0 0 24 24" fill="none" stroke="#5B9BF0" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0012 0M12 17v4M9 21h6"/></svg>',
+};
+const tmChannels=[
+  {icon:'web',name:'Web',desc:'Contenido profundo: artículos, calculadoras y simuladores completos.',link:'#herramientas',label:'Ir a las herramientas'},
+  {icon:'instagram',name:'Instagram',desc:'Carruseles y contenido visual con los conceptos clave de cada módulo.',link:`https://instagram.com/${CONFIG.instagram}`,label:'@'+CONFIG.instagram},
+  {icon:'x',name:'X',desc:'Actualizaciones breves, datos del observatorio y enlaces a contenidos nuevos.',link:`https://x.com/${CONFIG.x}`,label:'@'+CONFIG.x},
+  {icon:'tiktok',name:'TikTok',desc:'Microcontenidos financieros de menos de un minuto.',soon:'Cuenta institucional por definir'},
+  {icon:'youtube',name:'YouTube',desc:'Explicaciones y clases completas sobre cada eje temático.',soon:'Canal institucional por definir'},
+  {icon:'whatsapp',name:'WhatsApp',desc:'Consejos y contenidos breves directo al chat. 0414-7722027',link:`https://wa.me/${CONFIG.whatsapp}`,label:'Escribir por WhatsApp'},
+  {icon:'podcast',name:'Podcast',desc:'Conversaciones y análisis en formato audio, a tu ritmo.',soon:'Episodios próximamente'},
+];
+$('tmGrid').innerHTML=tmChannels.map(c=>`
+  <div class="card tm-card">
+    <div class="tm-icon" aria-hidden="true">${tmIcons[c.icon]}</div>
+    <h4>${c.name}</h4>
+    <p>${esc(c.desc)}</p>
+    ${c.link ? `<a class="tm-link" href="${c.link}" ${c.link.startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(c.label)} →</a>` : `<span class="tm-soon">${esc(c.soon)}</span>`}
+  </div>`).join('');
+const whiteIcon=s=>s.replace(/stroke="#[^"]+"/g,'stroke="#fff"').replace(/fill="#[^"]+"/g,'fill="#fff"');
+$('footSocial').innerHTML=[
+  {icon:'instagram',link:`https://instagram.com/${CONFIG.instagram}`,label:'Instagram @'+CONFIG.instagram},
+  {icon:'x',link:`https://x.com/${CONFIG.x}`,label:'X @'+CONFIG.x},
+  {icon:'whatsapp',link:`https://wa.me/${CONFIG.whatsapp}`,label:'WhatsApp 0414-7722027'},
+].map(s=>`<a href="${s.link}" target="_blank" rel="noopener" aria-label="${esc(s.label)}" title="${esc(s.label)}">${whiteIcon(tmIcons[s.icon])}</a>`).join('');
+
+/* ============ COMPARTIR ============ */
+function shareURL(){
+  if(CONFIG.sitioURL) return CONFIG.sitioURL;
+  try{ if(window.top===window.self && /^https?:/.test(location.protocol)) return location.href.split('#')[0]; }catch(e){}
+  return '';
+}
+const shareText='🧭 Brújula Financiera UBV: aprende, calcula y simula tus finanzas con 9 herramientas gratuitas.';
+$('shareWa').href='https://wa.me/?text='+encodeURIComponent(shareText+(shareURL()?' '+shareURL():''));
+$('shareCopy').addEventListener('click',async()=>{
+  const url=shareURL()||location.href.split('#')[0];
+  try{ await navigator.clipboard.writeText(url); toast('Enlace copiado ✔'); }
+  catch(e){ $('copyFallback').classList.add('show'); $('copyInput').value=url; $('copyInput').select(); }
+});
+
+/* ============ GLOSARIO ============ */
+const glossaryTerms=[
+  {t:'ROI',s:'Cuánto ganaste comparado con lo que invertiste.',tec:'Retorno sobre la inversión: (Ganancia neta / Inversión) × 100.',ej:'Invertir 100 y ganar 120 → ROI = 20%.',tool:'tool-roi'},
+  {t:'Inflación',s:'Cuando el dinero alcanza para comprar menos que antes.',tec:'Aumento sostenido y generalizado del nivel de precios de una economía en un período determinado.',ej:'Si algo costaba 10 y ahora cuesta 11, hubo un 10% de inflación en ese período.'},
+  {t:'Renta fija',s:'Instrumentos cuyo pago suele estar pactado de antemano.',tec:'Instrumentos de deuda donde el emisor se compromete a condiciones de pago previamente establecidas.',ej:'Un certificado que promete pagar una tasa fija a un plazo determinado.'},
+  {t:'Renta variable',s:'Instrumentos cuyo valor puede subir o bajar según el desempeño del emisor.',tec:'Instrumentos de participación (como acciones) cuyo rendimiento depende del desempeño de la entidad emisora y del mercado.',ej:'El precio de una acción puede subir o bajar día a día.'},
+  {t:'Stablecoin',s:'Criptomoneda que intenta mantener un valor estable, casi siempre referenciado al dólar.',tec:'Criptoactivo diseñado para minimizar la volatilidad respecto a un activo de referencia, mediante reservas u otros mecanismos.',ej:'USDT y USDC son ejemplos de stablecoins referenciadas al dólar.'},
+  {t:'Blockchain',s:'Un registro digital compartido que es muy difícil de alterar.',tec:'Estructura de datos distribuida que almacena transacciones en bloques enlazados criptográficamente.',ej:'Bitcoin y Ethereum funcionan sobre una blockchain.'},
+  {t:'P2P',s:'Comprar o vender directamente entre dos personas, sin un intermediario tradicional.',tec:'Peer to peer: intercambio directo entre usuarios, generalmente facilitado por una plataforma que conecta a las partes.',ej:'Comprar USDT directamente a otro usuario a través de una plataforma P2P.',tool:'tool-p2p'},
+  {t:'Fintech',s:'Empresas que usan tecnología para ofrecer servicios financieros.',tec:'Sector que combina tecnología financiera y servicios digitales para mejorar el acceso y la eficiencia de productos financieros.',ej:'Una app que permite solicitar un crédito 100% en línea.'},
+  {t:'Crowdfunding',s:'Reunir dinero de muchas personas para financiar un proyecto.',tec:'Financiamiento colectivo de un proyecto mediante pequeños aportes de múltiples participantes, generalmente a través de una plataforma.',ej:'40 personas aportan 100 cada una para reunir el capital de un proyecto.',tool:'cfCard'},
+  {t:'Crowdfarming',s:'Financiamiento colectivo aplicado a proyectos agrícolas.',tec:'Variante del crowdfunding orientada a financiar cosechas o proyectos del sector agropecuario, con retorno vinculado a la producción.',ej:'Aportar capital para financiar una cosecha a cambio de parte de la producción o un retorno pactado.'},
+  {t:'Liquidez',s:'Qué tan fácil es convertir algo en dinero disponible.',tec:'Capacidad de un activo para convertirse en efectivo rápidamente sin pérdida significativa de valor.',ej:'El efectivo es totalmente líquido; un inmueble tiene baja liquidez.'},
+  {t:'Interés compuesto',s:'Ganar intereses sobre los intereses ya generados, no solo sobre el capital inicial.',tec:'Rendimiento que se reinvierte periódicamente, de modo que la base sobre la que se calcula el interés crece con el tiempo.',ej:'200 al 8% anual durante 10 años crecen más que sumando un 8% fijo cada año sobre el capital inicial.',tool:'tool-interes'},
+  {t:'Margen neto',s:'Qué porcentaje del precio de venta termina siendo ganancia real.',tec:'(Ganancia neta / Precio de venta) × 100, después de descontar todos los costos.',ej:'Vender algo en 10 con una ganancia real de 2 → margen neto = 20%.',tool:'tool-precios'},
+  {t:'Markup',s:'Cuánto se le agrega al costo para fijar el precio de venta.',tec:'(Ganancia / Costo total) × 100.',ej:'Costo de 5, precio de venta de 7 → markup = 40%.',tool:'tool-precios'},
+  {t:'Punto de equilibrio',s:'La cantidad que necesitas vender para no perder ni ganar dinero.',tec:'Nivel de ventas en el que los ingresos totales igualan a los costos totales (fijos + variables).',ej:'Si tus costos fijos son 400 y ganas 5 por unidad vendida, necesitas vender 80 unidades.',tool:'tool-equilibrio'},
+  {t:'Amortización',s:'El proceso de ir pagando una deuda poco a poco, cuota por cuota.',tec:'Distribución periódica del pago de una deuda, compuesta por capital e intereses, hasta saldarla completamente.',ej:'Una cuota mensual fija que reduce, mes a mes, el saldo pendiente de un crédito.',tool:'tool-amortizacion'},
+  {t:'Dividendo',s:'La parte de las ganancias que una empresa reparte entre sus accionistas.',tec:'Distribución de utilidades a los accionistas, en efectivo o en acciones, aprobada por la asamblea de la empresa.',ej:'Una empresa reparte 0,02 por acción; con 1.000 acciones recibes 20.',tool:'tool-dividendos'},
+  {t:'Casa de bolsa',s:'La empresa autorizada que te permite comprar y vender en la bolsa.',tec:'Intermediario de valores autorizado por el ente regulador para ejecutar operaciones en el mercado por cuenta de sus clientes.',ej:'Para comprar acciones en la BVC abres una cuenta en una casa de bolsa.'},
+];
+glossaryTerms.sort((a,b)=>a.t.localeCompare(b.t,'es'));
+function hl(text,q){ if(!q) return esc(text); const nt=norm(text); let out='',i=0,idx; while((idx=nt.indexOf(q,i))!==-1){ out+=esc(text.slice(i,idx))+'<mark>'+esc(text.slice(idx,idx+q.length))+'</mark>'; i=idx+q.length; } return out+esc(text.slice(i)); }
+function renderGlossary(filter=''){
+  const q=norm(filter.trim());
+  const items=glossaryTerms.filter(g=>!q || norm(g.t+' '+g.s+' '+g.tec+' '+g.ej).includes(q))
+    .sort((a,b)=>q?(norm(b.t).includes(q)-norm(a.t).includes(q)):0);
+  $('glossCount').textContent= q ? `${items.length} resultado${items.length===1?'':'s'} para “${filter.trim()}”` : `${glossaryTerms.length} términos`;
+  $('glossGrid').innerHTML = items.length ? items.map(g=>`
+    <div class="card gloss-term">
+      <h4>${hl(g.t,q)}</h4>
+      <p><span class="gloss-label">Definición sencilla</span><br>${hl(g.s,q)}</p>
+      <p><span class="gloss-label">Definición técnica</span><br>${hl(g.tec,q)}</p>
+      <p style="margin:0;"><span class="gloss-label">Ejemplo</span><br>${hl(g.ej,q)}</p>
+      ${g.tool?`<a class="tm-link" style="color:var(--naranja)" href="#${g.tool}">Practicar con la herramienta →</a>`:''}
+    </div>`).join('') : '<p>No se encontraron términos con ese criterio.</p>';
+}
+let gT; $('glossSearch').addEventListener('input',e=>{ renderGlossary(e.target.value); clearTimeout(gT); if(e.target.value.trim().length>=2) gT=setTimeout(()=>markReto('glosario'),800); });
+renderGlossary();
+
+/* ============ INICIO ============ */
+calcEquilibrio(); calcPrecios(); calcRoi(); calcP2P(); calcConv(); calcInteres(); calcPresupuesto(); calcAmortizacion();
+updateProgress(true);
+spy();
+</script>
+</body>
+</html>
